@@ -2,11 +2,12 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>FDEZ Logistics</title>
 
 <meta name="description" content="FDEZ Logistics: logística internacional, trámites de aduana, almacenaje y distribución, mudanzas Colombia–Panamá, agente de compra, carga pesada y comercial. Oficinas en Ciudad de Panamá y Bogotá.">
 <meta name="theme-color" content="#FF6B00">
+<meta name="color-scheme" content="light">
 <link rel="icon" type="image/webp" href="logo.webp">
 <link rel="apple-touch-icon" href="logo.webp">
 <link rel="canonical" href="https://juanarrietabusiness-pixel.github.io/fdez_logistics/">
@@ -33,62 +34,106 @@
 /* ==========================================================================
    FDEZ Logistics — sitio estático de una sola página
    Paleta de marca centralizada en :root — cambiar aquí para theming global.
+
+   Reglas de color accesibles (WCAG AA):
+   · Superficie naranja de marca  -> texto en tinta oscura (--ink-brand)  ≥ 6:1
+   · Superficie blanca            -> naranja profundo (--orange-deep)     ≥ 4.7:1
+   El naranja vivo (#FF6B00) nunca lleva texto blanco encima: no llega a AA.
    ========================================================================== */
 :root{
   --orange:#FF6B00;
   --orange-200:#FFB366;
   --orange-100:#FFC999;
+  --orange-deep:#C24E00;      /* naranja de marca oscurecido: AA sobre blanco y con blanco */
   --brand-grad:linear-gradient(135deg,#FF6B00 0%,#FFB366 70%,#FFC999 100%);
   --btn-grad:linear-gradient(135deg,#FF6B00,#FFB366);
   --ink:#000000;
+  --ink-brand:#2B1400;        /* tinta para texto sobre naranja */
   --text:#3a3a3a;
-  --muted:#6f7276;
-  --line:#ececec;
+  --muted:#63666a;
+  --line:#e4e4e4;
   --bg:#ffffff;
   --bg-soft:#fafafa;
   --white:#ffffff;
+  --danger:#b3261e;
+  --success:#1b6b3a;
+  --wa:#0e7c42;
+  --wa-dark:#0a5f33;
   --radius:15px;
+  --radius-sm:12px;
   --shadow:0 12px 34px rgba(0,0,0,.08);
   --shadow-lg:0 22px 60px rgba(255,107,0,.18);
   --container:1180px;
+  --gutter:clamp(16px,4vw,24px);
+  --section-y:clamp(52px,7.5vw,92px);
   --header-h:88px;
+  --tap:44px;                 /* objetivo táctil mínimo */
+  --safe-l:env(safe-area-inset-left,0px);
+  --safe-r:env(safe-area-inset-right,0px);
+  --safe-b:env(safe-area-inset-bottom,0px);
 }
 
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:var(--header-h)}
+*{box-sizing:border-box;margin:0;padding:0;min-width:0}
+html{
+  scroll-behavior:smooth;
+  scroll-padding-top:calc(var(--header-h) + 12px);
+  -webkit-text-size-adjust:100%;
+}
 body{
   font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
-  color:var(--text);background:var(--bg);line-height:1.65;
+  color:var(--text);background:var(--bg);line-height:1.65;font-size:16px;
   -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  overflow-wrap:break-word;
 }
+body.nav-open{overflow:hidden}
 img,svg{display:block;max-width:100%}
 a{text-decoration:none;color:inherit}
 ul{list-style:none}
-button,input,select,textarea{font-family:inherit;font-size:inherit}
-button{cursor:pointer;border:none;background:none}
-h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02em}
+button,input,select,textarea{font-family:inherit}
+button{cursor:pointer;border:none;background:none;color:inherit}
+h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02em;text-wrap:balance}
+p{text-wrap:pretty}
 
-.container{max-width:var(--container);margin:0 auto;padding:0 24px}
-.section{padding:92px 0}
-.section--soft{background:var(--bg-soft)}
-.section-head{text-align:center;max-width:760px;margin:0 auto 54px}
-.eyebrow{
-  display:inline-block;color:var(--orange);font-weight:700;font-size:13px;
-  letter-spacing:.16em;text-transform:uppercase;margin-bottom:12px;
+/* ---- Accesibilidad base ---- */
+.sr-only{
+  position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;
 }
-.section-head h2{font-size:clamp(28px,4vw,42px)}
-.section-head p{margin-top:14px;color:var(--muted);font-size:clamp(15px,1.6vw,17.5px)}
+:focus-visible{outline:3px solid var(--orange-deep);outline-offset:3px;border-radius:6px}
+.site-header :focus-visible,.value-bar :focus-visible,.quote-copy :focus-visible{outline-color:var(--ink-brand)}
+.hero :focus-visible,.site-footer :focus-visible,.floating-actions :focus-visible{outline-color:#fff;outline-offset:4px}
+.skip-link{
+  position:fixed;top:-120px;left:12px;z-index:1200;background:var(--white);color:var(--orange-deep);
+  padding:14px 22px;border-radius:0 0 var(--radius-sm) var(--radius-sm);font-weight:800;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);transition:top .2s ease;
+}
+.skip-link:focus{top:0}
+
+.container{max-width:var(--container);margin:0 auto;padding:0 var(--gutter)}
+.section{padding:var(--section-y) 0}
+.section--soft{background:var(--bg-soft)}
+.section-head{text-align:center;max-width:760px;margin:0 auto clamp(32px,5vw,54px)}
+.eyebrow{
+  display:inline-block;color:var(--orange-deep);font-weight:700;font-size:clamp(12px,2.6vw,13px);
+  letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px;
+}
+.section-head h2{font-size:clamp(26px,5.4vw,42px)}
+.section-head p{margin-top:14px;color:var(--muted);font-size:clamp(15px,3.4vw,17.5px)}
 
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:10px;
-  padding:19px 32px;border-radius:var(--radius);font-weight:700;font-size:15px;
-  border:none;transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
+  min-height:var(--tap);padding:16px clamp(20px,4vw,32px);border-radius:var(--radius);
+  font-weight:800;font-size:clamp(15px,3.4vw,16px);line-height:1.25;text-align:center;
+  border:2px solid transparent;
+  transition:transform .2s ease,box-shadow .2s ease,background .2s ease,color .2s ease;
 }
-.btn-primary{background:var(--btn-grad);color:var(--white);box-shadow:0 10px 26px rgba(255,107,0,.28)}
+.btn-primary{background:var(--btn-grad);color:var(--ink-brand);box-shadow:0 10px 26px rgba(255,107,0,.28)}
 .btn-primary:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(255,107,0,.36)}
-.btn-ghost{background:rgba(255,255,255,.14);color:var(--white);border:2px solid rgba(255,255,255,.75);backdrop-filter:blur(4px)}
-.btn-ghost:hover{background:var(--white);color:var(--orange);transform:translateY(-3px)}
+.btn-primary:active{transform:translateY(0)}
+.btn-ghost{background:rgba(0,0,0,.35);color:var(--white);border-color:rgba(255,255,255,.85);backdrop-filter:blur(4px)}
+.btn-ghost:hover{background:var(--white);color:var(--orange-deep);border-color:var(--white);transform:translateY(-3px)}
 .btn-block{width:100%}
+.btn[aria-busy="true"]{opacity:.75;pointer-events:none}
 
 /* ---------- Marco de imagen con placeholder de marca ----------
    La foto real va encima; si el archivo aún no existe, el <img> se
@@ -97,218 +142,399 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
 .media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2}
 .media .ph{
   position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:10px;color:rgba(255,255,255,.9);
+  align-items:center;justify-content:center;gap:10px;color:var(--ink-brand);padding:16px;text-align:center;
 }
-.media .ph i{font-size:clamp(28px,4vw,44px)}
-.media .ph span{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+.media .ph i{font-size:clamp(26px,7vw,44px)}
+.media .ph span{font-size:clamp(10px,2.6vw,11px);font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.8}
 
 /* ================= HEADER ================= */
 .site-header{
   position:sticky;top:0;z-index:900;background:var(--brand-grad);
   box-shadow:0 6px 24px rgba(0,0,0,.10);
+  padding-left:var(--safe-l);padding-right:var(--safe-r);
 }
-.header-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;height:var(--header-h)}
-.brand{display:flex;align-items:center;gap:12px}
-.brand img{height:56px;width:auto;border-radius:10px;background:#fff;padding:4px;box-shadow:0 4px 14px rgba(0,0,0,.12)}
-.brand-name{color:#fff;font-weight:900;font-size:19px;letter-spacing:-.02em;line-height:1.1}
-.brand-name small{display:block;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;opacity:.9}
-.main-nav ul{display:flex;align-items:center;gap:6px}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:clamp(10px,2vw,20px);min-height:var(--header-h)}
+.brand{display:flex;align-items:center;gap:12px;min-width:0;padding:4px;border-radius:12px}
+.brand img{height:clamp(38px,9vw,56px);width:auto;border-radius:10px;background:#fff;padding:4px;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.brand-name{color:var(--ink-brand);font-weight:900;font-size:clamp(15px,3.8vw,19px);letter-spacing:-.02em;line-height:1.1;min-width:0}
+.brand-name small{display:block;font-size:clamp(9.5px,2.4vw,11px);font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.78}
+.main-nav ul{display:flex;align-items:center;gap:2px}
 .main-nav a{
-  display:block;padding:10px 15px;border-radius:10px;color:#fff;font-weight:600;
-  font-size:14.5px;transition:background .2s ease;
+  display:flex;align-items:center;min-height:var(--tap);padding:10px clamp(9px,1.2vw,15px);
+  border-radius:10px;color:var(--ink-brand);font-weight:700;font-size:clamp(13.5px,1.3vw,14.5px);
+  transition:background .2s ease;
 }
-.main-nav a:hover,.main-nav a.active{background:rgba(255,255,255,.22)}
-.header-cta{display:inline-flex;align-items:center;gap:9px;padding:12px 20px;border-radius:12px;background:#fff;color:var(--orange);font-weight:800;font-size:14px;transition:transform .2s ease}
-.header-cta:hover{transform:translateY(-2px)}
-.burger{display:none;color:#fff;font-size:23px;padding:8px}
-.mobile-nav{display:none;background:var(--brand-grad);border-top:1px solid rgba(255,255,255,.28)}
+.main-nav a:hover{background:rgba(255,255,255,.55)}
+.main-nav a.active{background:rgba(255,255,255,.85)}
+.header-cta{
+  display:inline-flex;align-items:center;gap:9px;min-height:var(--tap);padding:12px clamp(12px,1.6vw,20px);
+  border-radius:12px;background:#fff;color:var(--orange-deep);font-weight:800;
+  font-size:clamp(13px,1.3vw,14px);white-space:nowrap;transition:transform .2s ease,box-shadow .2s ease;
+}
+.header-cta:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.18)}
+.burger{
+  display:none;place-items:center;width:var(--tap);height:var(--tap);border-radius:12px;
+  color:var(--ink-brand);font-size:22px;background:rgba(255,255,255,.42);flex:none;
+}
+.burger:hover{background:rgba(255,255,255,.72)}
+.scroll-progress{
+  position:absolute;left:0;bottom:0;height:3px;width:100%;transform:scaleX(0);transform-origin:0 50%;
+  background:var(--ink-brand);opacity:.55;pointer-events:none;
+}
+.mobile-nav{
+  display:none;background:var(--brand-grad);border-top:1px solid rgba(0,0,0,.16);
+  max-height:calc(100dvh - var(--header-h));overflow-y:auto;overscroll-behavior:contain;
+  padding-left:var(--safe-l);padding-right:var(--safe-r);
+}
 .mobile-nav.open{display:block}
-.mobile-nav ul{padding:10px 24px 22px}
-.mobile-nav a{display:block;padding:13px 4px;color:#fff;font-weight:600;border-bottom:1px solid rgba(255,255,255,.22)}
+.mobile-nav ul{padding:8px var(--gutter) calc(18px + var(--safe-b))}
+.mobile-nav a{
+  display:flex;align-items:center;gap:10px;min-height:52px;padding:12px 6px;
+  color:var(--ink-brand);font-weight:700;font-size:16px;border-bottom:1px solid rgba(0,0,0,.14);
+}
+.mobile-nav a:hover,.mobile-nav a.active{background:rgba(255,255,255,.45);border-radius:10px}
 .mobile-nav li:last-child a{border-bottom:none}
+.mobile-nav .nav-cta{margin-top:10px;background:#fff;color:var(--orange-deep);border-radius:12px;justify-content:center;border-bottom:none}
 
 /* ================= HERO ================= */
-.hero{position:relative;height:clamp(460px,72vh,660px);overflow:hidden;background:#111}
-.slide{position:absolute;inset:0;opacity:0;transition:opacity .8s ease;pointer-events:none}
-.slide.active{opacity:1;pointer-events:auto}
+/* Los slides se apilan en la MISMA celda de grid: la altura la marca el
+   contenido, así nunca se recorta el texto en pantallas pequeñas o apaisadas. */
+.hero{position:relative;display:grid;overflow:hidden;background:#111;isolation:isolate}
+.slide{
+  grid-area:1/1;position:relative;opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .8s ease,visibility 0s linear .8s;
+}
+.slide.active{opacity:1;visibility:visible;pointer-events:auto;transition:opacity .8s ease}
 .slide .media{position:absolute;inset:0}
-.slide-overlay{position:absolute;inset:0;z-index:3;background:linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(0,0,0,.5) 45%,rgba(0,0,0,.2) 100%)}
-.slide-content{position:relative;z-index:4;height:100%;display:flex;align-items:center}
-.slide-content .container{max-width:var(--container);width:100%}
+/* Sin la foto real, el marcador del hero es solo un icono tenue: una etiqueta
+   de texto ahí se confundiría con el contenido de la diapositiva. */
+.slide .media .ph span{display:none}
+.slide .media .ph i{font-size:clamp(72px,20vw,150px);opacity:.22}
+.slide-overlay{position:absolute;inset:0;z-index:3;background:linear-gradient(90deg,rgba(0,0,0,.82) 0%,rgba(0,0,0,.66) 45%,rgba(0,0,0,.38) 100%)}
+.slide-content{
+  position:relative;z-index:4;display:flex;align-items:center;
+  min-height:clamp(400px,66svh,620px);
+  padding:clamp(28px,6vw,52px) 0 clamp(88px,14vw,112px);
+}
+.slide-content .container{width:100%}
 .slide-text{max-width:640px;color:#fff}
 .slide-text .eyebrow{color:var(--orange-100)}
-.slide-text h1{color:#fff;font-size:clamp(30px,5.2vw,54px);font-weight:900;text-shadow:0 2px 20px rgba(0,0,0,.35)}
-.slide-text p{margin-top:16px;font-size:clamp(15px,1.9vw,19px);color:rgba(255,255,255,.92);max-width:560px}
-.hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:30px}
+.slide-text h1,.slide-text h2{color:#fff;font-size:clamp(25px,6.4vw,54px);font-weight:900;text-shadow:0 2px 20px rgba(0,0,0,.45)}
+.slide-text p{margin-top:14px;font-size:clamp(15px,3.6vw,19px);color:rgba(255,255,255,.95);max-width:560px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(20px,4vw,30px)}
 .hero-nav{
   position:absolute;top:50%;transform:translateY(-50%);z-index:6;
   width:52px;height:52px;border-radius:50%;display:grid;place-items:center;
-  background:rgba(255,255,255,.16);color:#fff;font-size:22px;line-height:1;
-  border:1px solid rgba(255,255,255,.4);backdrop-filter:blur(6px);transition:background .2s ease;
+  background:rgba(0,0,0,.55);color:#fff;font-size:20px;line-height:1;
+  border:1px solid rgba(255,255,255,.6);backdrop-filter:blur(6px);
+  transition:background .2s ease,transform .2s ease;
 }
-.hero-nav:hover{background:var(--orange)}
-.hero-nav.prev{left:22px}
-.hero-nav.next{right:22px}
-.hero-dots{position:absolute;left:0;right:0;bottom:24px;z-index:6;display:flex;justify-content:center;gap:10px}
-.hero-dots button{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.45);transition:.25s ease}
-.hero-dots button.active{background:var(--orange);width:30px;border-radius:6px}
+.hero-nav:hover{background:var(--orange-deep)}
+.hero-nav.prev{left:16px}
+.hero-nav.next{right:16px}
+.hero-bar{
+  position:absolute;left:50%;transform:translateX(-50%);bottom:calc(22px + var(--safe-b));z-index:6;
+  display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:999px;
+  background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(6px);
+  max-width:calc(100% - 32px);
+}
+.hero-dots{display:flex;align-items:center;gap:4px}
+.hero-dots button{
+  width:32px;height:38px;display:grid;place-items:center;border-radius:8px;background:none;
+}
+.hero-dots button::before{
+  content:"";display:block;width:11px;height:11px;border-radius:50%;
+  background:rgba(255,255,255,.55);transition:background .25s ease,width .25s ease;
+}
+.hero-dots button[aria-current="true"]::before{background:var(--orange);width:22px;border-radius:6px}
+.hero-play{
+  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.2);color:#fff;font-size:13px;flex:none;
+}
+.hero-play:hover{background:rgba(255,255,255,.4)}
 
 /* ================= BARRA DE VALORES ================= */
-.value-bar{background:var(--brand-grad);padding:26px 0}
-.value-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.value-item{display:flex;align-items:center;gap:14px;color:#fff}
-.value-item i{font-size:26px;flex-shrink:0}
-.value-item strong{display:block;font-size:15px;font-weight:800;line-height:1.25}
-.value-item span{font-size:13px;opacity:.92}
+.value-bar{background:var(--brand-grad);padding:clamp(20px,4vw,26px) 0}
+.value-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,215px),1fr));gap:clamp(14px,2.4vw,20px)}
+.value-item{display:flex;align-items:center;gap:13px;color:var(--ink-brand)}
+.value-item i{font-size:clamp(22px,5vw,26px);flex:none}
+.value-item strong{display:block;font-size:clamp(14px,3.2vw,15px);font-weight:800;line-height:1.25}
+.value-item span{font-size:clamp(12.5px,3vw,13px);opacity:.85}
 
 /* ================= SERVICIOS ================= */
-.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,278px),1fr));gap:clamp(16px,2.6vw,26px)}
 .service-card{
   background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
   display:flex;flex-direction:column;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;
 }
 .service-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:transparent}
 .service-card .media{aspect-ratio:16/10}
-.service-body{padding:24px}
-.service-body h3{font-size:19px;margin-bottom:9px}
-.service-body p{font-size:14.8px;color:var(--muted)}
+.service-body{padding:clamp(18px,3.4vw,24px)}
+.service-body h3{font-size:clamp(17px,3.9vw,19px);margin-bottom:9px}
+.service-body p{font-size:clamp(14.5px,3.3vw,15px);color:var(--muted)}
 
 /* ================= COTIZACIÓN ================= */
-.quote{background:var(--brand-grad);color:#fff}
-.quote-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
-.quote-copy h2{color:#fff;font-size:clamp(28px,4vw,42px)}
-.quote-copy p{margin-top:16px;font-size:17px;color:rgba(255,255,255,.94);max-width:480px}
-.quote-list{margin-top:28px;display:grid;gap:14px}
-.quote-list li{display:flex;align-items:flex-start;gap:12px;font-weight:600;font-size:15.5px}
-.quote-list i{margin-top:4px;color:#fff}
-.form-card{background:#fff;border-radius:var(--radius);padding:34px;box-shadow:0 26px 60px rgba(0,0,0,.18)}
-.form-card h3{font-size:21px;margin-bottom:6px}
-.form-card .form-note{color:var(--muted);font-size:14px;margin-bottom:22px}
+.quote{background:var(--brand-grad);color:var(--ink-brand)}
+.quote-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5vw,56px);align-items:center}
+.quote-copy h2{color:var(--ink-brand);font-size:clamp(26px,5.4vw,42px)}
+.quote-copy .eyebrow{color:var(--ink-brand);opacity:.8}
+.quote-copy p{margin-top:14px;font-size:clamp(15.5px,3.4vw,17px);max-width:480px}
+.quote-list{margin-top:26px;display:grid;gap:13px}
+.quote-list li{display:flex;align-items:flex-start;gap:12px;font-weight:700;font-size:clamp(14.8px,3.3vw,15.5px)}
+.quote-list i{margin-top:5px;flex:none}
+.form-card{background:#fff;border-radius:var(--radius);padding:clamp(20px,4.5vw,34px);box-shadow:0 26px 60px rgba(0,0,0,.18)}
+.form-card h3{font-size:clamp(19px,4.4vw,21px);margin-bottom:6px}
+.form-card .form-note{color:var(--muted);font-size:14px;margin-bottom:20px}
 .field{margin-bottom:16px}
-.field label{display:block;font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:7px}
+.field label{display:block;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:7px}
+.field .opt{color:var(--muted);font-weight:500}
 .field input,.field select,.field textarea{
-  width:100%;padding:14px 16px;border:1.5px solid var(--line);border-radius:12px;
+  width:100%;padding:14px 16px;min-height:var(--tap);font-size:16px; /* 16px evita el zoom automático en iOS */
+  border:1.5px solid #cfcfcf;border-radius:var(--radius-sm);
   background:#fff;color:var(--text);transition:border-color .2s ease,box-shadow .2s ease;
 }
 .field textarea{min-height:132px;resize:vertical}
 .field input:focus,.field select:focus,.field textarea:focus{
-  outline:none;border-color:var(--orange);box-shadow:0 0 0 4px rgba(255,107,0,.14);
+  outline:none;border-color:var(--orange-deep);box-shadow:0 0 0 4px rgba(194,78,0,.18);
 }
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+/* Con teclado, el anillo de foco debe verse claramente (WCAG 2.4.11). */
+.field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{
+  outline:3px solid var(--orange-deep);outline-offset:1px;
+}
+.field input[aria-invalid="true"],.field select[aria-invalid="true"],.field textarea[aria-invalid="true"]{
+  border-color:var(--danger);box-shadow:0 0 0 4px rgba(179,38,30,.12);
+}
+.field-error{display:none;margin-top:7px;font-size:13.5px;font-weight:600;color:var(--danger)}
+.field-error.show{display:flex;gap:7px;align-items:flex-start}
+.field-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:16px}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
-.form-status{margin-top:14px;font-size:14px;font-weight:600;color:var(--orange);min-height:21px}
+.form-status{margin-top:14px;font-size:14px;font-weight:700;color:var(--orange-deep);min-height:21px}
+.form-status.is-error{color:var(--danger)}
+.form-status.is-ok{color:var(--success)}
 
 /* ================= NOSOTROS ================= */
-.about-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px}
+.about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(16px,2.6vw,26px)}
 .about-card{
-  background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:34px;
+  background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:clamp(22px,4vw,34px);
   transition:transform .25s ease,box-shadow .25s ease;
 }
 .about-card:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
 .about-icon{
-  width:58px;height:58px;border-radius:16px;display:grid;place-items:center;
-  background:var(--btn-grad);color:#fff;font-size:23px;margin-bottom:18px;
+  width:56px;height:56px;border-radius:16px;display:grid;place-items:center;
+  background:var(--btn-grad);color:var(--ink-brand);font-size:22px;margin-bottom:16px;
 }
-.about-card h3{font-size:20px;margin-bottom:10px}
-.about-card p{font-size:15.2px;color:var(--muted)}
+.about-card h3{font-size:clamp(18px,4.2vw,20px);margin-bottom:10px}
+.about-card p{font-size:clamp(14.8px,3.3vw,15.2px);color:var(--muted)}
 
 /* ================= CONTACTO ================= */
-.offices-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-bottom:26px}
+.offices-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(16px,2.6vw,26px);margin-bottom:clamp(18px,2.6vw,26px)}
 .office-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column}
 .office-card .media{aspect-ratio:16/9}
-.office-body{padding:24px;display:flex;flex-direction:column;gap:12px;flex:1}
-.office-body h3{font-size:18px}
-.office-body address{font-style:normal;color:var(--muted);font-size:14.8px;display:flex;gap:10px}
-.office-body address i{color:var(--orange);margin-top:4px}
-.map-link{margin-top:auto;display:inline-flex;align-items:center;gap:9px;color:var(--orange);font-weight:700;font-size:14.5px}
+.office-body{padding:clamp(18px,3.4vw,24px);display:flex;flex-direction:column;gap:12px;flex:1}
+.office-body h3{font-size:clamp(17px,3.9vw,18px)}
+.office-body address{font-style:normal;color:var(--muted);font-size:clamp(14.5px,3.3vw,15px);display:flex;gap:10px}
+.office-body address i{color:var(--orange-deep);margin-top:4px;flex:none}
+.map-link{
+  margin-top:auto;display:inline-flex;align-items:center;gap:9px;min-height:var(--tap);
+  color:var(--orange-deep);font-weight:700;font-size:15px;
+}
 .map-link:hover{text-decoration:underline}
 
-.contact-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:26px;align-items:start}
-.info-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:32px}
-.info-card h3{font-size:20px;margin-bottom:20px}
-.info-list{display:grid;gap:18px}
-.info-item{display:flex;gap:15px;align-items:flex-start}
+.contact-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:clamp(16px,2.6vw,26px);align-items:start}
+.info-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:clamp(20px,4vw,32px)}
+.info-card h3{font-size:clamp(18px,4.2vw,20px);margin-bottom:18px}
+.info-list{display:grid;gap:6px}
+.info-item{display:flex;gap:14px;align-items:center;padding:8px 0;min-height:var(--tap)}
 .info-item .ico{
-  width:44px;height:44px;border-radius:12px;flex-shrink:0;display:grid;place-items:center;
-  background:rgba(255,107,0,.1);color:var(--orange);font-size:17px;
+  width:44px;height:44px;border-radius:12px;flex:none;display:grid;place-items:center;
+  background:rgba(255,107,0,.12);color:var(--orange-deep);font-size:17px;
 }
-.info-item strong{display:block;font-size:14px;color:var(--ink)}
-.info-item a,.info-item p{font-size:15px;color:var(--muted)}
-.info-item a:hover{color:var(--orange)}
-.hours{margin-top:26px;padding-top:24px;border-top:1px solid var(--line)}
-.hours h4{font-size:15px;margin-bottom:14px;display:flex;align-items:center;gap:9px}
-.hours h4 i{color:var(--orange)}
-.hours-row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:14.6px;border-bottom:1px dashed var(--line)}
+.info-item strong{display:block;font-size:13.5px;color:var(--ink)}
+.info-item a,.info-item p{font-size:15px;color:var(--muted);overflow-wrap:anywhere}
+.info-item a{display:inline-flex;align-items:center;min-height:40px}
+.info-item a:hover{color:var(--orange-deep);text-decoration:underline}
+.hours{margin-top:24px;padding-top:22px;border-top:1px solid var(--line)}
+.hours h4{font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:9px}
+.hours h4 i{color:var(--orange-deep)}
+.hours-row{
+  display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  padding:10px 0;font-size:clamp(14px,3.2vw,14.6px);border-bottom:1px dashed var(--line);
+}
 .hours-row:last-child{border-bottom:none}
 .hours-row span:last-child{font-weight:700;color:var(--ink)}
-.hours-row.closed span:last-child{color:#c0392b}
+.hours-row.closed span:last-child{color:#a01f16}
 
-/* ================= WHATSAPP ================= */
+/* ================= ACCIONES FLOTANTES ================= */
+.floating-actions{
+  position:fixed;z-index:950;
+  right:calc(16px + var(--safe-r));bottom:calc(16px + var(--safe-b));
+  display:flex;flex-direction:column;align-items:flex-end;gap:12px;
+  transition:opacity .25s ease,transform .25s ease,visibility .25s ease;
+}
+/* En pantallas bajas el hero llega hasta abajo y estos botones taparían las
+   flechas del carrusel: se apartan solos mientras eso ocurra. */
+.floating-actions.tapado{opacity:0;visibility:hidden;transform:translateY(10px)}
+.to-top{
+  width:var(--tap);height:var(--tap);border-radius:50%;display:grid;place-items:center;
+  background:var(--white);color:var(--orange-deep);font-size:17px;border:1px solid var(--line);
+  box-shadow:0 8px 22px rgba(0,0,0,.18);
+  opacity:0;visibility:hidden;transform:translateY(10px);
+  transition:opacity .25s ease,transform .25s ease,visibility .25s ease;
+}
+.to-top.show{opacity:1;visibility:visible;transform:none}
+.to-top:hover{background:var(--orange-deep);color:#fff}
 .wa-float{
-  position:fixed;right:22px;bottom:22px;z-index:950;
-  display:flex;align-items:center;gap:11px;padding:14px 20px 14px 16px;border-radius:50px;
-  background:#25D366;color:#fff;font-weight:700;font-size:14.5px;
-  box-shadow:0 12px 30px rgba(37,211,102,.42);transition:transform .2s ease;
+  display:flex;align-items:center;gap:11px;min-height:56px;padding:14px 20px 14px 16px;border-radius:50px;
+  background:var(--wa);color:#fff;font-weight:700;font-size:15px;
+  box-shadow:0 12px 30px rgba(14,124,66,.4);transition:transform .2s ease,background .2s ease;
 }
 .wa-float i{font-size:25px}
-.wa-float:hover{transform:translateY(-3px) scale(1.02)}
+.wa-float:hover{transform:translateY(-3px) scale(1.02);background:var(--wa-dark)}
 
 /* ================= FOOTER ================= */
-.site-footer{background:#0f0f0f;color:rgba(255,255,255,.72);padding:64px 0 30px}
-.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:44px;padding-bottom:40px}
-.site-footer h4{color:#fff;font-size:15px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:18px}
-.footer-brand img{height:62px;width:auto;border-radius:12px;background:#fff;padding:6px;margin-bottom:18px}
-.footer-brand p{font-size:14.6px;max-width:340px}
-.footer-social{display:flex;gap:12px;margin-top:20px}
-.footer-social a{
-  width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
-  background:rgba(255,255,255,.08);color:#fff;font-size:17px;transition:background .2s ease;
+.site-footer{
+  background:#0f0f0f;color:rgba(255,255,255,.78);
+  padding:clamp(44px,7vw,64px) 0 calc(30px + var(--safe-b));
+  padding-left:var(--safe-l);padding-right:var(--safe-r);
 }
-.footer-social a:hover{background:var(--orange)}
-.footer-links li{margin-bottom:11px;font-size:14.6px}
-.footer-links a:hover{color:var(--orange-200)}
-.footer-contact li{display:flex;gap:11px;margin-bottom:13px;font-size:14.6px}
-.footer-contact i{color:var(--orange);margin-top:4px}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:clamp(28px,4vw,44px);padding-bottom:clamp(28px,4vw,40px)}
+.site-footer h4{color:#fff;font-size:15px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:16px}
+.footer-brand img{height:clamp(52px,12vw,62px);width:auto;border-radius:12px;background:#fff;padding:6px;margin-bottom:16px}
+.footer-brand p{font-size:14.8px;max-width:340px}
+.footer-social{display:flex;gap:12px;margin-top:18px}
+.footer-social a{
+  width:var(--tap);height:var(--tap);border-radius:12px;display:grid;place-items:center;
+  background:rgba(255,255,255,.1);color:#fff;font-size:17px;transition:background .2s ease;
+}
+.footer-social a:hover{background:var(--orange-deep)}
+.footer-links a{display:flex;align-items:center;min-height:var(--tap);font-size:15px}
+.footer-links a:hover{color:var(--orange-200);text-decoration:underline}
+.footer-contact li{display:flex;gap:11px;margin-bottom:12px;font-size:14.8px;overflow-wrap:anywhere}
+.footer-contact i{color:var(--orange-200);margin-top:4px;flex:none}
+.footer-contact a{min-height:var(--tap);display:inline-flex;align-items:center}
+.footer-contact a:hover{color:var(--orange-200);text-decoration:underline}
 .footer-bottom{
-  border-top:1px solid rgba(255,255,255,.1);padding-top:24px;
-  display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13.6px;
+  border-top:1px solid rgba(255,255,255,.12);padding-top:22px;
+  display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:13.8px;
 }
 
 /* ================= REVEAL ================= */
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .6s ease}
 .reveal.visible{opacity:1;transform:none}
 
-/* ================= RESPONSIVE ================= */
-@media (max-width:1024px){
-  .services-grid{grid-template-columns:repeat(2,1fr)}
-  .quote-grid{grid-template-columns:1fr;gap:38px}
-  .contact-grid{grid-template-columns:1fr}
-  .value-grid{grid-template-columns:repeat(2,1fr);gap:24px}
+/* ==========================================================================
+   RESPONSIVE — de escritorio grande a 280px de ancho
+   ========================================================================== */
+
+/* Tablet horizontal / portátil pequeño: el menú se compacta antes de romperse */
+@media (max-width:1080px){
+  :root{--header-h:80px}
+  .main-nav a{padding:10px 9px;font-size:13.5px}
+  .header-cta{padding:12px 14px}
 }
-@media (max-width:860px){
-  :root{--header-h:74px}
+
+/* Tablet vertical */
+@media (max-width:1024px){
+  .quote-grid{grid-template-columns:1fr;gap:34px}
+  .quote-copy p{max-width:none}
+  .contact-grid{grid-template-columns:1fr}
+}
+
+@media (max-width:900px){
+  :root{--header-h:76px}
   .main-nav,.header-cta{display:none}
-  .burger{display:block}
-  .brand img{height:46px}
-  .brand-name{font-size:16px}
-  .section{padding:64px 0}
-  .services-grid,.about-grid,.offices-grid{grid-template-columns:1fr}
-  .hero-nav{width:44px;height:44px;font-size:18px}
+  .burger{display:grid}
+  .value-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .footer-brand{grid-column:1/-1}
+}
+
+/* Móvil y tablet: los controles del carrusel bajan a la zona del pulgar.
+   A estos anchos el contenedor ocupa casi toda la pantalla, así que unas
+   flechas laterales se comerían el titular. */
+@media (max-width:1024px){
+  .hero-nav{top:auto;bottom:calc(18px + var(--safe-b));transform:none;width:var(--tap);height:var(--tap);font-size:17px}
   .hero-nav.prev{left:12px}
   .hero-nav.next{right:12px}
-  .footer-grid{grid-template-columns:1fr;gap:36px}
-  .wa-float span{display:none}
-  .wa-float{padding:16px;border-radius:50%}
 }
+
+/* Anchos intermedios: las flechas vuelven a los laterales, pero el contenedor
+   todavía no tiene margen suficiente y hay que apartarle el texto. */
+@media (min-width:1025px) and (max-width:1320px){
+  .slide-content .container{padding-left:84px;padding-right:84px}
+}
+
+@media (max-width:720px){
+  .slide-overlay{background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.7) 55%,rgba(0,0,0,.82) 100%)}
+  .footer-grid{grid-template-columns:1fr;gap:30px}
+  .footer-brand{grid-column:auto}
+  .footer-brand p{max-width:none}
+}
+
 @media (max-width:560px){
-  .field-row{grid-template-columns:1fr}
-  .form-card{padding:26px 22px}
-  .btn{width:100%;padding:17px 24px}
-  .hero-actions{gap:11px}
+  .hero-actions .btn,.section .btn:not(.map-link){width:100%}
+  .footer-bottom{justify-content:center;text-align:center}
+  .info-card,.form-card{border-radius:var(--radius)}
 }
+
+/* Móviles pequeños (≤400px): una sola columna en todo y tipografía ajustada */
+@media (max-width:400px){
+  :root{--header-h:68px;--gutter:14px}
+  .value-grid{grid-template-columns:1fr}
+  .brand img{height:36px}
+  .hero-bar{gap:6px;padding:6px 9px}
+  .hero-nav{width:42px;height:42px}
+  .hero-nav.prev{left:8px}
+  .hero-nav.next{right:8px}
+  .floating-actions{right:calc(12px + var(--safe-r));bottom:calc(12px + var(--safe-b))}
+  /* Modo icono: medidas fijas para que el botón no se deforme aunque el CDN
+     de iconos no cargue. */
+  .wa-float{width:var(--tap);height:var(--tap);min-height:var(--tap);padding:0;border-radius:50%;justify-content:center}
+  .wa-float span{display:none}
+  .wa-float i{font-size:22px}
+}
+
+/* Pantallas muy estrechas (≤340px): se oculta el subtítulo de la marca */
+@media (max-width:340px){
+  .brand-name small{display:none}
+  .brand{gap:8px}
+  .info-item{gap:10px}
+  .info-item .ico{width:38px;height:38px;font-size:15px}
+}
+
+/* Móvil apaisado / pantallas muy bajas: el hero no debe ocupar todo el alto */
+@media (max-height:520px) and (orientation:landscape){
+  .slide-content{min-height:auto;padding:26px 0 78px}
+  .slide-text h1,.slide-text h2{font-size:clamp(22px,4.4vw,32px)}
+  .slide-text p{font-size:14.5px;margin-top:10px}
+  .hero-actions{margin-top:16px}
+  .mobile-nav{max-height:calc(100dvh - var(--header-h))}
+}
+
+/* Dispositivos táctiles: sin efectos de hover que se quedan "pegados" */
+@media (hover:none){
+  .service-card:hover,.about-card:hover,.btn:hover,.header-cta:hover,.wa-float:hover,.to-top:hover{transform:none}
+}
+
+@media (prefers-contrast:more){
+  :root{--muted:#4a4d51;--line:#9a9a9a}
+  .btn,.field input,.field select,.field textarea{border-width:2px}
+  .slide-overlay{background:rgba(0,0,0,.78)}
+}
+
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  html{scroll-behavior:auto}
   .reveal{opacity:1;transform:none}
+  .to-top{transition:none}
+}
+
+@media print{
+  .site-header,.mobile-nav,.floating-actions,.hero-nav,.hero-bar,.skip-link,form{display:none!important}
+  body{color:#000}
+  .reveal{opacity:1;transform:none}
+  .slide:not(.active){display:none}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:11px;word-break:break-all}
 }
 </style>
 
@@ -316,24 +542,29 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
   <style>
     /* Sin JavaScript: mostrar todo el contenido y el primer banner */
     .reveal{opacity:1;transform:none}
-    .slide{opacity:0}
-    .slide:first-of-type{opacity:1;pointer-events:auto}
-    .hero-nav,.hero-dots{display:none}
+    .slide{opacity:0;visibility:hidden}
+    .slide:first-of-type{opacity:1;visibility:visible;pointer-events:auto}
+    .hero-nav,.hero-bar,.to-top{display:none}
+    .burger{display:none!important}
+    .main-nav{display:block!important}
+    .main-nav ul{flex-wrap:wrap;justify-content:center}
   </style>
 </noscript>
 </head>
 <body>
 
+<a class="skip-link" href="#contenido">Saltar al contenido principal</a>
+
 <!-- ================= HEADER ================= -->
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href="#inicio" aria-label="FDEZ Logistics — Inicio">
-      <img src="logo.webp" alt="FDEZ Logistics Logo">
+    <a class="brand" href="#inicio" aria-label="FDEZ Logistics — Ir al inicio">
+      <img src="logo.webp" alt="" width="56" height="56">
       <span class="brand-name">FDEZ Logistics<small>Panamá · Colombia</small></span>
     </a>
 
     <nav class="main-nav" aria-label="Navegación principal">
-      <ul>
+      <ul role="list">
         <li><a href="#inicio">Inicio</a></li>
         <li><a href="#servicios">Servicios</a></li>
         <li><a href="#cotizacion">Cotización</a></li>
@@ -342,31 +573,32 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
       </ul>
     </nav>
 
-    <a class="header-cta" href="tel:+50766253189"><i class="fa-solid fa-phone"></i> +507 6625-3189</a>
-    <button class="burger" id="burgerBtn" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileNav">
-      <i class="fa-solid fa-bars"></i>
+    <a class="header-cta" href="tel:+50766253189"><i class="fa-solid fa-phone" aria-hidden="true"></i> +507 6625-3189</a>
+    <button class="burger" id="burgerBtn" type="button" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="mobileNav">
+      <i class="fa-solid fa-bars" aria-hidden="true"></i>
     </button>
   </div>
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
   <nav class="mobile-nav" id="mobileNav" aria-label="Navegación móvil">
-    <ul>
+    <ul role="list">
       <li><a href="#inicio">Inicio</a></li>
       <li><a href="#servicios">Servicios</a></li>
       <li><a href="#cotizacion">Cotización</a></li>
       <li><a href="#nosotros">Nosotros</a></li>
       <li><a href="#contacto">Contacto</a></li>
-      <li><a href="tel:+50766253189"><i class="fa-solid fa-phone"></i> +507 6625-3189</a></li>
+      <li><a class="nav-cta" href="tel:+50766253189"><i class="fa-solid fa-phone" aria-hidden="true"></i> Llamar +507 6625-3189</a></li>
     </ul>
   </nav>
 </header>
 
-<main>
+<main id="contenido">
 <!-- ================= HERO / CARRUSEL ================= -->
-<section class="hero" id="inicio" aria-label="Presentación">
-  <article class="slide active">
+<section class="hero" id="inicio" aria-roledescription="carrusel" aria-label="Presentación de FDEZ Logistics">
+  <article class="slide active" role="group" aria-roledescription="diapositiva" aria-label="1 de 3: Logística internacional">
     <div class="media">
-      <img src="assets/img/dbanner1.jpg" alt="Imagen 1" onerror="this.remove()">
-      <div class="ph"><i class="fa-solid fa-ship"></i><span>dbanner1.jpg</span></div>
+      <img src="assets/img/dbanner1.jpg" alt="Buque portacontenedores cargando mercancía en puerto" fetchpriority="high" onerror="this.remove()">
+      <div class="ph" aria-hidden="true"><i class="fa-solid fa-ship"></i><span>Logística internacional</span></div>
     </div>
     <div class="slide-overlay"></div>
     <div class="slide-content">
@@ -376,7 +608,7 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
           <h1>Movemos tu carga entre Panamá, Colombia y el mundo</h1>
           <p>Trámite de aduana incorporado, red global de socios y acompañamiento en cada etapa de tu envío.</p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#cotizacion"><i class="fa-solid fa-file-invoice-dollar"></i> Solicitar cotización</a>
+            <a class="btn btn-primary" href="#cotizacion"><i class="fa-solid fa-file-invoice-dollar" aria-hidden="true"></i> Solicitar cotización</a>
             <a class="btn btn-ghost" href="#servicios">Ver servicios</a>
           </div>
         </div>
@@ -384,20 +616,20 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
     </div>
   </article>
 
-  <article class="slide">
+  <article class="slide" role="group" aria-roledescription="diapositiva" aria-label="2 de 3: Almacenaje y distribución">
     <div class="media">
-      <img src="assets/img/dbanner2.jpg" alt="Imagen 2" onerror="this.remove()">
-      <div class="ph"><i class="fa-solid fa-warehouse"></i><span>dbanner2.jpg</span></div>
+      <img src="assets/img/dbanner2.jpg" alt="Almacén con mercancía ordenada en estanterías" loading="lazy" onerror="this.remove()">
+      <div class="ph" aria-hidden="true"><i class="fa-solid fa-warehouse"></i><span>Almacenaje y distribución</span></div>
     </div>
     <div class="slide-overlay"></div>
     <div class="slide-content">
       <div class="container">
         <div class="slide-text">
           <span class="eyebrow">Almacenaje y distribución</span>
-          <h1>Tu mercancía segura, ordenada y lista para entregar</h1>
+          <h2>Tu mercancía segura, ordenada y lista para entregar</h2>
           <p>Almacenamos y distribuimos los productos de tu negocio o emprendimiento con total trazabilidad.</p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#contacto"><i class="fa-solid fa-headset"></i> Hablar con un asesor</a>
+            <a class="btn btn-primary" href="#contacto"><i class="fa-solid fa-headset" aria-hidden="true"></i> Hablar con un asesor</a>
             <a class="btn btn-ghost" href="#nosotros">Conócenos</a>
           </div>
         </div>
@@ -405,20 +637,20 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
     </div>
   </article>
 
-  <article class="slide">
+  <article class="slide" role="group" aria-roledescription="diapositiva" aria-label="3 de 3: Carga pesada y comercial">
     <div class="media">
-      <img src="assets/img/dbanner3.jpg" alt="Imagen 3" onerror="this.remove()">
-      <div class="ph"><i class="fa-solid fa-truck-fast"></i><span>dbanner3.jpg</span></div>
+      <img src="assets/img/dbanner3.jpg" alt="Camión de carga pesada en ruta" loading="lazy" onerror="this.remove()">
+      <div class="ph" aria-hidden="true"><i class="fa-solid fa-truck-fast"></i><span>Carga pesada y comercial</span></div>
     </div>
     <div class="slide-overlay"></div>
     <div class="slide-content">
       <div class="container">
         <div class="slide-text">
           <span class="eyebrow">Carga pesada y comercial</span>
-          <h1>Movemos lo que otros no pueden</h1>
+          <h2>Movemos lo que otros no pueden</h2>
           <p>Seguridad, eficiencia y experiencia para carga pesada, carga comercial e importación de repuestos.</p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#cotizacion"><i class="fa-solid fa-box-open"></i> Cotiza tu carga</a>
+            <a class="btn btn-primary" href="#cotizacion"><i class="fa-solid fa-box-open" aria-hidden="true"></i> Cotiza tu carga</a>
             <a class="btn btn-ghost" href="#contacto">Contáctanos</a>
           </div>
         </div>
@@ -426,35 +658,39 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
     </div>
   </article>
 
-  <button class="hero-nav prev" id="heroPrev" aria-label="Imagen anterior">&#10094;</button>
-  <button class="hero-nav next" id="heroNext" aria-label="Imagen siguiente">&#10095;</button>
-  <div class="hero-dots" id="heroDots" role="tablist" aria-label="Seleccionar imagen"></div>
+  <button class="hero-nav prev" id="heroPrev" type="button" aria-label="Imagen anterior"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+  <button class="hero-nav next" id="heroNext" type="button" aria-label="Imagen siguiente"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+  <div class="hero-bar">
+    <div class="hero-dots" id="heroDots"></div>
+    <button class="hero-play" id="heroPlay" type="button" aria-label="Pausar cambio automático de imágenes"><i class="fa-solid fa-pause" aria-hidden="true"></i></button>
+  </div>
+  <p class="sr-only" id="heroLive" aria-live="polite"></p>
 </section>
 
 <!-- ================= BARRA DE VALORES ================= -->
 <section class="value-bar" aria-label="Por qué elegirnos">
   <div class="container">
     <div class="value-grid">
-      <div class="value-item"><i class="fa-solid fa-file-shield"></i><div><strong>Aduana incorporada</strong><span>Sin complicaciones</span></div></div>
-      <div class="value-item"><i class="fa-solid fa-earth-americas"></i><div><strong>Red global</strong><span>Socios internacionales</span></div></div>
-      <div class="value-item"><i class="fa-solid fa-tags"></i><div><strong>Precios competitivos</strong><span>Sin costos ocultos</span></div></div>
-      <div class="value-item"><i class="fa-solid fa-location-dot"></i><div><strong>Panamá y Colombia</strong><span>Oficinas propias</span></div></div>
+      <div class="value-item"><i class="fa-solid fa-file-shield" aria-hidden="true"></i><div><strong>Aduana incorporada</strong><span>Sin complicaciones</span></div></div>
+      <div class="value-item"><i class="fa-solid fa-earth-americas" aria-hidden="true"></i><div><strong>Red global</strong><span>Socios internacionales</span></div></div>
+      <div class="value-item"><i class="fa-solid fa-tags" aria-hidden="true"></i><div><strong>Precios competitivos</strong><span>Sin costos ocultos</span></div></div>
+      <div class="value-item"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><div><strong>Panamá y Colombia</strong><span>Oficinas propias</span></div></div>
     </div>
   </div>
 </section>
 
 <!-- ================= SERVICIOS ================= -->
-<section class="section" id="servicios">
+<section class="section" id="servicios" aria-labelledby="servicios-titulo">
   <div class="container">
     <div class="section-head reveal">
       <span class="eyebrow">Lo que hacemos</span>
-      <h2>Nuestros Servicios</h2>
+      <h2 id="servicios-titulo">Nuestros Servicios</h2>
       <p>Cubrimos toda la cadena logística, desde el trámite aduanal hasta la entrega en la puerta de tu cliente.</p>
     </div>
 
     <div class="services-grid">
       <article class="service-card reveal">
-        <div class="media"><img src="assets/img/aduana.jpg" alt="Oficina aduana" loading="lazy" onerror="this.remove()"><div class="ph"><i class="fa-solid fa-file-shield"></i><span>aduana.jpg</span></div></div>
+        <div class="media"><img src="assets/img/aduana.jpg" alt="Documentación de aduana siendo revisada" loading="lazy" decoding="async" onerror="this.remove()"><div class="ph" aria-hidden="true"><i class="fa-solid fa-file-shield"></i><span>Aduana</span></div></div>
         <div class="service-body">
           <h3>Trámite de Aduana Incorporado</h3>
           <p>Gestionamos todos los procesos aduanales para que tus envíos internacionales lleguen sin complicaciones.</p>
@@ -462,7 +698,7 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
       </article>
 
       <article class="service-card reveal">
-        <div class="media"><img src="assets/img/logistica.jpg" alt="Oficina logistica" loading="lazy" onerror="this.remove()"><div class="ph"><i class="fa-solid fa-earth-americas"></i><span>logistica.jpg</span></div></div>
+        <div class="media"><img src="assets/img/logistica.jpg" alt="Mapa de rutas logísticas internacionales" loading="lazy" decoding="async" onerror="this.remove()"><div class="ph" aria-hidden="true"><i class="fa-solid fa-earth-americas"></i><span>Logística</span></div></div>
         <div class="service-body">
           <h3>Logística Internacional</h3>
           <p>Conectamos tu negocio con el mundo a través de nuestra red global de socios logísticos.</p>
@@ -470,7 +706,7 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
       </article>
 
       <article class="service-card reveal">
-        <div class="media"><img src="assets/img/envio.jpg" alt="Oficina envio" loading="lazy" onerror="this.remove()"><div class="ph"><i class="fa-solid fa-warehouse"></i><span>envio.jpg</span></div></div>
+        <div class="media"><img src="assets/img/envio.jpg" alt="Cajas listas para distribución en almacén" loading="lazy" decoding="async" onerror="this.remove()"><div class="ph" aria-hidden="true"><i class="fa-solid fa-warehouse"></i><span>Almacenaje</span></div></div>
         <div class="service-body">
           <h3>Almacenaje y Distribución</h3>
           <p>Su Almacenaje y también la distribución de sus productos o emprendimiento</p>
@@ -478,7 +714,7 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
       </article>
 
       <article class="service-card reveal">
-        <div class="media"><img src="assets/img/mudanza.jpg" alt="Oficina mudanza" loading="lazy" onerror="this.remove()"><div class="ph"><i class="fa-solid fa-truck-ramp-box"></i><span>mudanza.jpg</span></div></div>
+        <div class="media"><img src="assets/img/mudanza.jpg" alt="Camión de mudanza siendo cargado" loading="lazy" decoding="async" onerror="this.remove()"><div class="ph" aria-hidden="true"><i class="fa-solid fa-truck-ramp-box"></i><span>Mudanza</span></div></div>
         <div class="service-body">
           <h3>Mudanza</h3>
           <p>Mudanza Colombia Panamá, Panamá Colombia.</p>
@@ -486,7 +722,7 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
       </article>
 
       <article class="service-card reveal">
-        <div class="media"><img src="assets/img/agente.jpg" alt="Oficina agente" loading="lazy" onerror="this.remove()"><div class="ph"><i class="fa-solid fa-cart-shopping"></i><span>agente.jpg</span></div></div>
+        <div class="media"><img src="assets/img/agente.jpg" alt="Compras gestionadas por un agente" loading="lazy" decoding="async" onerror="this.remove()"><div class="ph" aria-hidden="true"><i class="fa-solid fa-cart-shopping"></i><span>Agente de compra</span></div></div>
         <div class="service-body">
           <h3>Agente de Compra</h3>
           <p>Agente de compra 100% seguro hacemos sus compras locales en el país de su interés.</p>
@@ -494,7 +730,7 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
       </article>
 
       <article class="service-card reveal">
-        <div class="media"><img src="assets/img/entrega.jpg" alt="Oficina entrega" loading="lazy" onerror="this.remove()"><div class="ph"><i class="fa-solid fa-house-circle-check"></i><span>entrega.jpg</span></div></div>
+        <div class="media"><img src="assets/img/entrega.jpg" alt="Entrega de un paquete en la puerta de un domicilio" loading="lazy" decoding="async" onerror="this.remove()"><div class="ph" aria-hidden="true"><i class="fa-solid fa-house-circle-check"></i><span>Entrega a domicilio</span></div></div>
         <div class="service-body">
           <h3>Entrega a Domicilio</h3>
           <p>Entregas a Domicilios llámanos y cotízanos puerta a puerta.</p>
@@ -502,7 +738,7 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
       </article>
 
       <article class="service-card reveal">
-        <div class="media"><img src="assets/img/Pesada.jpg" alt="Pesada" loading="lazy" onerror="this.remove()"><div class="ph"><i class="fa-solid fa-truck-monster"></i><span>Pesada.jpg</span></div></div>
+        <div class="media"><img src="assets/img/Pesada.jpg" alt="Maquinaria de carga pesada sobre plataforma" loading="lazy" decoding="async" onerror="this.remove()"><div class="ph" aria-hidden="true"><i class="fa-solid fa-truck-monster"></i><span>Carga pesada</span></div></div>
         <div class="service-body">
           <h3>Carga Pesada</h3>
           <p>¡Movemos lo que otros no pueden! Especialistas en carga pesada. Seguridad Eficiencia Experiencia.</p>
@@ -510,7 +746,7 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
       </article>
 
       <article class="service-card reveal">
-        <div class="media"><img src="assets/img/Comercial.jpg" alt="Comercial" loading="lazy" onerror="this.remove()"><div class="ph"><i class="fa-solid fa-boxes-stacked"></i><span>Comercial.jpg</span></div></div>
+        <div class="media"><img src="assets/img/Comercial.jpg" alt="Mercancía comercial paletizada" loading="lazy" decoding="async" onerror="this.remove()"><div class="ph" aria-hidden="true"><i class="fa-solid fa-boxes-stacked"></i><span>Carga comercial</span></div></div>
         <div class="service-body">
           <h3>Carga Comercial</h3>
           <p>Desde 6 unidades en adelante como perfumería, accesorios, zapatos, ropa, repuestos.</p>
@@ -518,7 +754,7 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
       </article>
 
       <article class="service-card reveal">
-        <div class="media"><img src="assets/img/Importamos.jpg" alt="Importamos" loading="lazy" onerror="this.remove()"><div class="ph"><i class="fa-solid fa-gears"></i><span>Importamos.jpg</span></div></div>
+        <div class="media"><img src="assets/img/Importamos.jpg" alt="Repuestos de vehículos listos para importación" loading="lazy" decoding="async" onerror="this.remove()"><div class="ph" aria-hidden="true"><i class="fa-solid fa-gears"></i><span>Repuestos</span></div></div>
         <div class="service-body">
           <h3>Importamos Repuestos</h3>
           <p>Tanto de Carros y Motos, piezas pequeñas y de todo tamaño de Colombia a Panamá y EEUU a Panamá.</p>
@@ -529,39 +765,42 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
 </section>
 
 <!-- ================= COTIZACIÓN ================= -->
-<section class="section quote" id="cotizacion">
+<section class="section quote" id="cotizacion" aria-labelledby="cotizacion-titulo">
   <div class="container">
     <div class="quote-grid">
       <div class="quote-copy reveal">
-        <span class="eyebrow" style="color:#fff">Cotiza sin compromiso</span>
-        <h2>Solicita una Cotización</h2>
+        <span class="eyebrow">Cotiza sin compromiso</span>
+        <h2 id="cotizacion-titulo">Solicita una Cotización</h2>
         <p>Cuéntanos qué necesitas mover y te respondemos con una propuesta clara, sin costos ocultos.</p>
-        <ul class="quote-list">
-          <li><i class="fa-solid fa-circle-check"></i> Tarifas claras y justas, sin sorpresas</li>
-          <li><i class="fa-solid fa-circle-check"></i> Asesoría en documentación y aduana</li>
-          <li><i class="fa-solid fa-circle-check"></i> Cobertura Panamá · Colombia · EEUU</li>
+        <ul class="quote-list" role="list">
+          <li><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Tarifas claras y justas, sin sorpresas</li>
+          <li><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Asesoría en documentación y aduana</li>
+          <li><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Cobertura Panamá · Colombia · EEUU</li>
         </ul>
       </div>
 
       <div class="form-card reveal">
         <h3>Cuéntanos sobre tu envío</h3>
-        <p class="form-note">Completa el formulario y un asesor te contactará.</p>
+        <p class="form-note">Completa el formulario y un asesor te contactará. Los campos marcados son obligatorios.</p>
         <form id="quoteForm" novalidate>
           <div class="field">
             <label for="q-nombre">Nombre completo</label>
-            <input type="text" id="q-nombre" name="nombre" placeholder="Tu nombre completo" required autocomplete="name">
+            <input type="text" id="q-nombre" name="nombre" placeholder="Tu nombre completo" required aria-required="true" autocomplete="name" enterkeyhint="next" aria-describedby="q-nombre-err">
+            <p class="field-error" id="q-nombre-err"></p>
           </div>
           <div class="field">
             <label for="q-email">Correo electrónico</label>
-            <input type="email" id="q-email" name="email" placeholder="Correo electrónico" required autocomplete="email">
+            <input type="email" id="q-email" name="email" placeholder="nombre@dominio.com" required aria-required="true" autocomplete="email" inputmode="email" enterkeyhint="next" aria-describedby="q-email-err">
+            <p class="field-error" id="q-email-err"></p>
           </div>
           <!-- honeypot anti-spam: si se llena, es un bot -->
           <div class="hp" aria-hidden="true"><label for="q-website">No llenar</label><input type="text" id="q-website" name="website" tabindex="-1" autocomplete="off"></div>
           <div class="field">
             <label for="q-mensaje">Mensaje</label>
-            <textarea id="q-mensaje" name="mensaje" placeholder="Cuéntanos sobre tu envío (origen, destino, tipo de mercancía, etc.)" required></textarea>
+            <textarea id="q-mensaje" name="mensaje" placeholder="Cuéntanos sobre tu envío (origen, destino, tipo de mercancía, etc.)" required aria-required="true" enterkeyhint="send" aria-describedby="q-mensaje-err"></textarea>
+            <p class="field-error" id="q-mensaje-err"></p>
           </div>
-          <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-paper-plane"></i> Solicitar Cotización</button>
+          <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Solicitar Cotización</button>
           <p class="form-status" id="quoteStatus" role="status" aria-live="polite"></p>
         </form>
       </div>
@@ -570,34 +809,34 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
 </section>
 
 <!-- ================= NOSOTROS ================= -->
-<section class="section section--soft" id="nosotros">
+<section class="section section--soft" id="nosotros" aria-labelledby="nosotros-titulo">
   <div class="container">
     <div class="section-head reveal">
       <span class="eyebrow">Quiénes somos</span>
-      <h2>Sobre Nosotros</h2>
+      <h2 id="nosotros-titulo">Sobre Nosotros</h2>
     </div>
 
     <div class="about-grid">
       <article class="about-card reveal">
-        <div class="about-icon"><i class="fa-solid fa-bullseye"></i></div>
+        <div class="about-icon" aria-hidden="true"><i class="fa-solid fa-bullseye"></i></div>
         <h3>Nuestra Misión</h3>
         <p>Ser la empresa líder en soluciones logísticas integrales, proporcionando valor añadido a nuestros clientes a través de la innovación, la eficiencia y la sostenibilidad.</p>
       </article>
 
       <article class="about-card reveal">
-        <div class="about-icon"><i class="fa-solid fa-eye"></i></div>
+        <div class="about-icon" aria-hidden="true"><i class="fa-solid fa-eye"></i></div>
         <h3>Nuestra Visión</h3>
         <p>Ser la empresa de logística más innovadora y eficiente de la región, reconocida por su excelencia operativa y su compromiso con la sostenibilidad.</p>
       </article>
 
       <article class="about-card reveal">
-        <div class="about-icon"><i class="fa-solid fa-satellite-dish"></i></div>
+        <div class="about-icon" aria-hidden="true"><i class="fa-solid fa-satellite-dish"></i></div>
         <h3>Rastreo en Tiempo Real</h3>
         <p>Contamos con tecnología de rastreo que permite visualizar la ubicación de tu carga en cualquier momento.</p>
       </article>
 
       <article class="about-card reveal">
-        <div class="about-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+        <div class="about-icon" aria-hidden="true"><i class="fa-solid fa-hand-holding-dollar"></i></div>
         <h3>Precios Competitivos</h3>
         <p>Ofrecemos tarifas claras y justas, sin costos ocultos, asegurando la mejor relación calidad-precio.</p>
       </article>
@@ -606,62 +845,62 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
 </section>
 
 <!-- ================= CONTACTO ================= -->
-<section class="section" id="contacto">
+<section class="section" id="contacto" aria-labelledby="contacto-titulo">
   <div class="container">
     <div class="section-head reveal">
       <span class="eyebrow">Estamos cerca</span>
-      <h2>Contacto</h2>
+      <h2 id="contacto-titulo">Contacto</h2>
       <p>Visítanos en nuestras oficinas de Panamá y Colombia, o escríbenos y te respondemos a la brevedad.</p>
     </div>
 
     <div class="offices-grid">
       <article class="office-card reveal">
-        <div class="media"><img src="assets/img/Panama.jpg" alt="Oficina Principal Panamá" loading="lazy" onerror="this.remove()"><div class="ph"><i class="fa-solid fa-building"></i><span>Panama.jpg</span></div></div>
+        <div class="media"><img src="assets/img/Panama.jpg" alt="Fachada de la oficina principal en Ciudad de Panamá" loading="lazy" decoding="async" onerror="this.remove()"><div class="ph" aria-hidden="true"><i class="fa-solid fa-building"></i><span>Oficina Panamá</span></div></div>
         <div class="office-body">
           <h3>Oficina Principal (Panamá)</h3>
-          <address><i class="fa-solid fa-location-dot"></i> PH Kitaen Vía España local 4, Ciudad de Panamá</address>
+          <address><i class="fa-solid fa-location-dot" aria-hidden="true"></i> PH Kitaen Vía España local 4, Ciudad de Panamá</address>
           <a class="map-link" href="https://maps.app.goo.gl/AMsN9Qqc6BQx2imn7" target="_blank" rel="noopener">
-            <i class="fa-solid fa-map-location-dot"></i> Ver en Google Maps
+            <i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> Ver en Google Maps<span class="sr-only"> (se abre en una pestaña nueva)</span>
           </a>
         </div>
       </article>
 
       <article class="office-card reveal">
-        <div class="media"><img src="assets/img/Colombia.jpg" alt="Oficina Colombia" loading="lazy" onerror="this.remove()"><div class="ph"><i class="fa-solid fa-building"></i><span>Colombia.jpg</span></div></div>
+        <div class="media"><img src="assets/img/Colombia.jpg" alt="Fachada de la oficina de Bogotá" loading="lazy" decoding="async" onerror="this.remove()"><div class="ph" aria-hidden="true"><i class="fa-solid fa-building"></i><span>Oficina Colombia</span></div></div>
         <div class="office-body">
           <h3>Oficina Colombia</h3>
-          <address><i class="fa-solid fa-location-dot"></i> CALLE 25 F N. 80C94 BARRIO: MODELIA, BOGOTÁ DC</address>
+          <address><i class="fa-solid fa-location-dot" aria-hidden="true"></i> CALLE 25 F N. 80C94 BARRIO: MODELIA, BOGOTÁ DC</address>
           <a class="map-link" href="https://maps.app.goo.gl/oFK2wtU1dFjLnK8Q6" target="_blank" rel="noopener">
-            <i class="fa-solid fa-map-location-dot"></i> Ver en Google Maps
+            <i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> Ver en Google Maps<span class="sr-only"> (se abre en una pestaña nueva)</span>
           </a>
         </div>
       </article>
     </div>
 
     <div class="contact-grid">
-      <aside class="info-card reveal">
-        <h3>Datos de contacto</h3>
+      <aside class="info-card reveal" aria-labelledby="datos-titulo">
+        <h3 id="datos-titulo">Datos de contacto</h3>
         <div class="info-list">
           <div class="info-item">
-            <span class="ico"><i class="fa-solid fa-mobile-screen-button"></i></span>
+            <span class="ico" aria-hidden="true"><i class="fa-solid fa-mobile-screen-button"></i></span>
             <div><strong>Celular</strong><a href="tel:+50766253189">+507 6625-3189</a></div>
           </div>
           <div class="info-item">
-            <span class="ico"><i class="fa-solid fa-envelope"></i></span>
+            <span class="ico" aria-hidden="true"><i class="fa-solid fa-envelope"></i></span>
             <div><strong>Email</strong><a href="mailto:fdezlogistics1@gmail.com">fdezlogistics1@gmail.com</a></div>
           </div>
           <div class="info-item">
-            <span class="ico"><i class="fa-brands fa-instagram"></i></span>
-            <div><strong>Instagram</strong><a href="https://www.instagram.com/fdez_logistics" target="_blank" rel="noopener">@fdez_logistics</a></div>
+            <span class="ico" aria-hidden="true"><i class="fa-brands fa-instagram"></i></span>
+            <div><strong>Instagram</strong><a href="https://www.instagram.com/fdez_logistics" target="_blank" rel="noopener">@fdez_logistics<span class="sr-only"> (se abre en una pestaña nueva)</span></a></div>
           </div>
           <div class="info-item">
-            <span class="ico"><i class="fa-brands fa-whatsapp"></i></span>
-            <div><strong>WhatsApp</strong><a href="https://wa.me/50766253189?text=%C2%A1Hola!%20Estoy%20interesado%20en%20sus%20servicios%20log%C3%ADsticos%20y%20quisiera%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener">Escríbenos ahora</a></div>
+            <span class="ico" aria-hidden="true"><i class="fa-brands fa-whatsapp"></i></span>
+            <div><strong>WhatsApp</strong><a href="https://wa.me/50766253189?text=%C2%A1Hola!%20Estoy%20interesado%20en%20sus%20servicios%20log%C3%ADsticos%20y%20quisiera%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener">Escríbenos ahora<span class="sr-only"> (se abre en una pestaña nueva)</span></a></div>
           </div>
         </div>
 
         <div class="hours">
-          <h4><i class="fa-regular fa-clock"></i> Horarios de atención</h4>
+          <h4><i class="fa-regular fa-clock" aria-hidden="true"></i> Horarios de atención</h4>
           <div class="hours-row"><span>Lunes a Viernes</span><span>8:30 AM – 6:00 PM</span></div>
           <div class="hours-row"><span>Sábados</span><span>9:30 AM – 1:00 PM</span></div>
           <div class="hours-row closed"><span>Domingos</span><span>Cerrado</span></div>
@@ -675,26 +914,29 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
           <div class="field-row">
             <div class="field">
               <label for="c-nombre">Nombre completo</label>
-              <input type="text" id="c-nombre" name="nombre" placeholder="Nombre completo" required autocomplete="name">
+              <input type="text" id="c-nombre" name="nombre" placeholder="Nombre completo" required aria-required="true" autocomplete="name" enterkeyhint="next" aria-describedby="c-nombre-err">
+              <p class="field-error" id="c-nombre-err"></p>
             </div>
             <div class="field">
               <label for="c-email">Correo electrónico</label>
-              <input type="email" id="c-email" name="email" placeholder="Correo electrónico" required autocomplete="email">
+              <input type="email" id="c-email" name="email" placeholder="nombre@dominio.com" required aria-required="true" autocomplete="email" inputmode="email" enterkeyhint="next" aria-describedby="c-email-err">
+              <p class="field-error" id="c-email-err"></p>
             </div>
           </div>
           <div class="field-row">
             <div class="field">
               <label for="c-telefono">Número de teléfono</label>
-              <input type="tel" id="c-telefono" name="telefono" placeholder="+507 0000-0000" required autocomplete="tel">
+              <input type="tel" id="c-telefono" name="telefono" placeholder="+507 0000-0000" required aria-required="true" autocomplete="tel" inputmode="tel" enterkeyhint="next" aria-describedby="c-telefono-err">
+              <p class="field-error" id="c-telefono-err"></p>
             </div>
             <div class="field">
-              <label for="c-empresa">Empresa <span style="color:var(--muted);font-weight:500">(opcional)</span></label>
-              <input type="text" id="c-empresa" name="empresa" placeholder="Nombre de tu empresa" autocomplete="organization">
+              <label for="c-empresa">Empresa <span class="opt">(opcional)</span></label>
+              <input type="text" id="c-empresa" name="empresa" placeholder="Nombre de tu empresa" autocomplete="organization" enterkeyhint="next">
             </div>
           </div>
           <div class="field">
             <label for="c-asunto">Selecciona el asunto</label>
-            <select id="c-asunto" name="asunto" required>
+            <select id="c-asunto" name="asunto" required aria-required="true" aria-describedby="c-asunto-err">
               <option value="" disabled selected>Selecciona el asunto</option>
               <option value="cotizacion">Solicitar Cotización</option>
               <option value="seguimiento">Seguimiento de Envío</option>
@@ -702,14 +944,16 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
               <option value="informacion">Información General</option>
               <option value="otros">Otros</option>
             </select>
+            <p class="field-error" id="c-asunto-err"></p>
           </div>
           <!-- honeypot anti-spam -->
           <div class="hp" aria-hidden="true"><label for="c-website">No llenar</label><input type="text" id="c-website" name="website" tabindex="-1" autocomplete="off"></div>
           <div class="field">
             <label for="c-mensaje">Mensaje</label>
-            <textarea id="c-mensaje" name="mensaje" placeholder="Escribe tu mensaje aquí..." required></textarea>
+            <textarea id="c-mensaje" name="mensaje" placeholder="Escribe tu mensaje aquí..." required aria-required="true" enterkeyhint="send" aria-describedby="c-mensaje-err"></textarea>
+            <p class="field-error" id="c-mensaje-err"></p>
           </div>
-          <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-paper-plane"></i> Enviar Mensaje</button>
+          <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Enviar Mensaje</button>
           <p class="form-status" id="contactStatus" role="status" aria-live="polite"></p>
         </form>
       </div>
@@ -718,45 +962,48 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
 </section>
 </main>
 
-<!-- ================= WHATSAPP FLOTANTE ================= -->
-<a class="wa-float"
-   href="https://wa.me/50766253189?text=%C2%A1Hola!%20Estoy%20interesado%20en%20sus%20servicios%20log%C3%ADsticos%20y%20quisiera%20m%C3%A1s%20informaci%C3%B3n."
-   target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
-  <i class="fa-brands fa-whatsapp"></i><span>WhatsApp</span>
-</a>
+<!-- ================= ACCIONES FLOTANTES ================= -->
+<div class="floating-actions">
+  <button class="to-top" id="toTop" type="button" aria-label="Volver arriba"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button>
+  <a class="wa-float"
+     href="https://wa.me/50766253189?text=%C2%A1Hola!%20Estoy%20interesado%20en%20sus%20servicios%20log%C3%ADsticos%20y%20quisiera%20m%C3%A1s%20informaci%C3%B3n."
+     target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp (se abre en una pestaña nueva)">
+    <i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span>WhatsApp</span>
+  </a>
+</div>
 
 <!-- ================= FOOTER ================= -->
 <footer class="site-footer">
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <img src="logo.webp" alt="FDEZ Logistics Logo">
+        <img src="logo.webp" alt="FDEZ Logistics" width="62" height="62">
         <p>Soluciones logísticas integrales entre Panamá, Colombia y el resto del mundo: aduana, carga, almacenaje y distribución.</p>
         <div class="footer-social">
-          <a href="https://www.instagram.com/fdez_logistics" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-          <a href="https://wa.me/50766253189" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-          <a href="mailto:fdezlogistics1@gmail.com" aria-label="Correo"><i class="fa-solid fa-envelope"></i></a>
+          <a href="https://www.instagram.com/fdez_logistics" target="_blank" rel="noopener" aria-label="Instagram de FDEZ Logistics (se abre en una pestaña nueva)"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+          <a href="https://wa.me/50766253189" target="_blank" rel="noopener" aria-label="WhatsApp de FDEZ Logistics (se abre en una pestaña nueva)"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
+          <a href="mailto:fdezlogistics1@gmail.com" aria-label="Escribir un correo a FDEZ Logistics"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
         </div>
       </div>
 
-      <div>
+      <nav aria-label="Navegación del pie de página">
         <h4>Navegación</h4>
-        <ul class="footer-links">
+        <ul class="footer-links" role="list">
           <li><a href="#inicio">Inicio</a></li>
           <li><a href="#servicios">Servicios</a></li>
           <li><a href="#cotizacion">Cotización</a></li>
           <li><a href="#nosotros">Nosotros</a></li>
           <li><a href="#contacto">Contacto</a></li>
         </ul>
-      </div>
+      </nav>
 
       <div>
         <h4>Contacto</h4>
-        <ul class="footer-contact">
-          <li><i class="fa-solid fa-location-dot"></i> PH Kitaen Vía España local 4, Ciudad de Panamá</li>
-          <li><i class="fa-solid fa-location-dot"></i> CALLE 25 F N. 80C94, Modelia, Bogotá DC</li>
-          <li><i class="fa-solid fa-phone"></i> <a href="tel:+50766253189">+507 6625-3189</a></li>
-          <li><i class="fa-solid fa-envelope"></i> <a href="mailto:fdezlogistics1@gmail.com">fdezlogistics1@gmail.com</a></li>
+        <ul class="footer-contact" role="list">
+          <li><i class="fa-solid fa-location-dot" aria-hidden="true"></i> PH Kitaen Vía España local 4, Ciudad de Panamá</li>
+          <li><i class="fa-solid fa-location-dot" aria-hidden="true"></i> CALLE 25 F N. 80C94, Modelia, Bogotá DC</li>
+          <li><i class="fa-solid fa-phone" aria-hidden="true"></i> <a href="tel:+50766253189">+507 6625-3189</a></li>
+          <li><i class="fa-solid fa-envelope" aria-hidden="true"></i> <a href="mailto:fdezlogistics1@gmail.com">fdezlogistics1@gmail.com</a></li>
         </ul>
       </div>
     </div>
@@ -772,84 +1019,245 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
 (function(){
   'use strict';
 
-  /* ---------- Menú móvil ---------- */
-  var burger = document.getElementById('burgerBtn');
-  var mobileNav = document.getElementById('mobileNav');
-  burger.addEventListener('click', function(){
-    var open = mobileNav.classList.toggle('open');
+  var $  = function(sel, ctx){ return (ctx || document).querySelector(sel); };
+  var $$ = function(sel, ctx){ return Array.prototype.slice.call((ctx || document).querySelectorAll(sel)); };
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* ==================================================================
+     MENÚ MÓVIL
+     Se cierra con Escape, al tocar fuera, al elegir una sección y al
+     pasar a escritorio. El foco vuelve siempre al botón hamburguesa.
+     ================================================================== */
+  var burger    = $('#burgerBtn');
+  var mobileNav = $('#mobileNav');
+
+  function setMenu(open, devolverFoco){
+    mobileNav.classList.toggle('open', open);
     burger.setAttribute('aria-expanded', String(open));
-    burger.innerHTML = open ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
-  });
-  mobileNav.addEventListener('click', function(e){
-    if (e.target.closest('a')) {
-      mobileNav.classList.remove('open');
-      burger.setAttribute('aria-expanded','false');
-      burger.innerHTML = '<i class="fa-solid fa-bars"></i>';
+    burger.setAttribute('aria-label', open ? 'Cerrar menú de navegación' : 'Abrir menú de navegación');
+    burger.innerHTML = open
+      ? '<i class="fa-solid fa-xmark" aria-hidden="true"></i>'
+      : '<i class="fa-solid fa-bars" aria-hidden="true"></i>';
+    document.body.classList.toggle('nav-open', open);
+    if (open) {
+      var primero = $('a', mobileNav);
+      if (primero) primero.focus({ preventScroll: true });
+    } else if (devolverFoco) {
+      burger.focus({ preventScroll: true });
     }
+  }
+
+  burger.addEventListener('click', function(){
+    setMenu(!mobileNav.classList.contains('open'), true);
   });
 
-  /* ---------- Carrusel del hero ---------- */
-  var slides = Array.prototype.slice.call(document.querySelectorAll('.hero .slide'));
-  var dotsWrap = document.getElementById('heroDots');
-  var index = 0, timer = null, DELAY = 6000;
+  mobileNav.addEventListener('click', function(e){
+    if (e.target.closest('a')) setMenu(false, false);
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && mobileNav.classList.contains('open')) setMenu(false, true);
+  });
+
+  document.addEventListener('click', function(e){
+    if (!mobileNav.classList.contains('open')) return;
+    if (e.target.closest('#mobileNav') || e.target.closest('#burgerBtn')) return;
+    setMenu(false, false);
+  });
+
+  // Al girar el móvil o pasar a escritorio, el menú desplegable sobra.
+  var anchoEscritorio = window.matchMedia('(min-width: 901px)');
+  var alCambiarAncho = function(){ if (anchoEscritorio.matches) setMenu(false, false); };
+  if (anchoEscritorio.addEventListener) anchoEscritorio.addEventListener('change', alCambiarAncho);
+  else if (anchoEscritorio.addListener) anchoEscritorio.addListener(alCambiarAncho);
+
+  /* ==================================================================
+     CARRUSEL DEL HERO
+     Accesible: se puede pausar (WCAG 2.2.2), se detiene al pasar el
+     puntero o el foco, respeta "reducir movimiento", soporta deslizar
+     con el dedo y no roba las flechas del teclado al resto de la página.
+     ================================================================== */
+  var hero     = $('.hero');
+  var slides   = $$('.hero .slide');
+  var dotsWrap = $('#heroDots');
+  var playBtn  = $('#heroPlay');
+  var live     = $('#heroLive');
+  var index = 0, timer = null, enPausa = false, pausaUsuario = false;
+  var DELAY = 6000;
 
   slides.forEach(function(_, i){
     var dot = document.createElement('button');
     dot.type = 'button';
-    dot.setAttribute('aria-label', 'Ir a la imagen ' + (i + 1));
-    if (i === 0) dot.classList.add('active');
-    dot.addEventListener('click', function(){ go(i); });
+    dot.setAttribute('aria-label', 'Ir a la imagen ' + (i + 1) + ' de ' + slides.length);
+    dot.setAttribute('aria-current', i === 0 ? 'true' : 'false');
+    dot.addEventListener('click', function(){ go(i, true); });
     dotsWrap.appendChild(dot);
   });
   var dots = Array.prototype.slice.call(dotsWrap.children);
 
-  function render(){
-    slides.forEach(function(s, i){ s.classList.toggle('active', i === index); });
-    dots.forEach(function(d, i){ d.classList.toggle('active', i === index); });
+  function render(anunciar){
+    slides.forEach(function(s, i){
+      var activo = i === index;
+      s.classList.toggle('active', activo);
+      s.inert = !activo;                       // fuera del orden de tabulación
+    });
+    dots.forEach(function(d, i){ d.setAttribute('aria-current', String(i === index)); });
+    if (anunciar && live) {
+      live.textContent = 'Imagen ' + (index + 1) + ' de ' + slides.length;
+    }
   }
-  function go(i){ index = (i + slides.length) % slides.length; render(); restart(); }
-  function next(){ go(index + 1); }
-  function prev(){ go(index - 1); }
-  function restart(){ clearInterval(timer); timer = setInterval(next, DELAY); }
+  function go(i, porUsuario){
+    index = (i + slides.length) % slides.length;
+    render(porUsuario);
+    if (porUsuario) reiniciar();
+  }
+  function next(porUsuario){ go(index + 1, porUsuario === true); }
+  function prev(porUsuario){ go(index - 1, porUsuario === true); }
 
-  document.getElementById('heroNext').addEventListener('click', next);
-  document.getElementById('heroPrev').addEventListener('click', prev);
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'ArrowRight') next();
-    if (e.key === 'ArrowLeft') prev();
+  function reiniciar(){
+    clearInterval(timer);
+    timer = null;
+    if (pausaUsuario || enPausa || reduceMotion.matches || slides.length < 2) return;
+    timer = setInterval(function(){ next(false); }, DELAY);
+  }
+  function sincronizarPlay(){
+    var pausado = pausaUsuario || reduceMotion.matches;
+    playBtn.setAttribute('aria-label', pausado
+      ? 'Reanudar cambio automático de imágenes'
+      : 'Pausar cambio automático de imágenes');
+    playBtn.innerHTML = pausado
+      ? '<i class="fa-solid fa-play" aria-hidden="true"></i>'
+      : '<i class="fa-solid fa-pause" aria-hidden="true"></i>';
+  }
+
+  playBtn.addEventListener('click', function(){
+    pausaUsuario = !pausaUsuario;
+    sincronizarPlay();
+    reiniciar();
   });
-  restart();
+  $('#heroNext').addEventListener('click', function(){ next(true); });
+  $('#heroPrev').addEventListener('click', function(){ prev(true); });
 
-  /* ---------- Enlace activo según la sección visible ---------- */
-  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.main-nav a'));
+  // Las flechas solo actúan si el foco está dentro del carrusel: así no
+  // interfieren al escribir en un formulario ni al navegar la página.
+  hero.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight') { e.preventDefault(); next(true); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); prev(true); }
+  });
+
+  ['mouseenter','focusin'].forEach(function(ev){
+    hero.addEventListener(ev, function(){ enPausa = true; reiniciar(); });
+  });
+  ['mouseleave','focusout'].forEach(function(ev){
+    hero.addEventListener(ev, function(){ enPausa = false; reiniciar(); });
+  });
+  document.addEventListener('visibilitychange', function(){
+    enPausa = document.hidden;
+    reiniciar();
+  });
+
+  // Deslizar con el dedo (móvil / tablet)
+  var xIni = null, yIni = null;
+  hero.addEventListener('touchstart', function(e){
+    var t = e.changedTouches[0];
+    xIni = t.clientX; yIni = t.clientY;
+  }, { passive: true });
+  hero.addEventListener('touchend', function(e){
+    if (xIni === null) return;
+    var t = e.changedTouches[0];
+    var dx = t.clientX - xIni, dy = t.clientY - yIni;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+      if (dx < 0) next(true); else prev(true);
+    }
+    xIni = yIni = null;
+  }, { passive: true });
+
+  render(false);
+  sincronizarPlay();
+  reiniciar();
+
+  /* ==================================================================
+     BARRA DE PROGRESO, BOTÓN "VOLVER ARRIBA" Y SOMBRA DEL HEADER
+     ================================================================== */
+  var progreso = $('#scrollProgress');
+  var toTop    = $('#toTop');
+  var tick = false;
+
+  function alDesplazar(){
+    var alto = document.documentElement.scrollHeight - window.innerHeight;
+    var y = window.pageYOffset || document.documentElement.scrollTop;
+    if (progreso) progreso.style.transform = 'scaleX(' + (alto > 0 ? Math.min(y / alto, 1) : 0) + ')';
+    if (toTop) toTop.classList.toggle('show', y > 600);
+    tick = false;
+  }
+  // Las acciones flotantes y los controles del carrusel comparten la esquina
+  // inferior en pantallas bajas: se comprueba el solape real y se apartan.
+  var flotantes = $('.floating-actions');
+  var controlesHero = [$('.hero-bar'), $('#heroPrev'), $('#heroNext')].filter(Boolean);
+
+  function apartarFlotantes(){
+    if (!flotantes) return;
+    var f = flotantes.getBoundingClientRect();
+    var choca = controlesHero.some(function(el){
+      var r = el.getBoundingClientRect();
+      return r.right > f.left - 10 && r.left < f.right + 10 &&
+             r.bottom > f.top - 10 && r.top < f.bottom + 10;
+    });
+    flotantes.classList.toggle('tapado', choca);
+  }
+
+  window.addEventListener('scroll', function(){
+    if (tick) return;
+    tick = true;
+    window.requestAnimationFrame(function(){ alDesplazar(); apartarFlotantes(); });
+  }, { passive: true });
+  window.addEventListener('resize', apartarFlotantes, { passive: true });
+  window.addEventListener('orientationchange', function(){ setTimeout(apartarFlotantes, 250); });
+  alDesplazar();
+  apartarFlotantes();
+
+  if (toTop) {
+    toTop.addEventListener('click', function(){
+      window.scrollTo({ top: 0, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+      var saltar = $('.skip-link');
+      if (saltar) saltar.focus({ preventScroll: true });
+    });
+  }
+
+  /* ==================================================================
+     ENLACE ACTIVO SEGÚN LA SECCIÓN VISIBLE + ANIMACIONES DE ENTRADA
+     ================================================================== */
+  var navLinks = $$('.main-nav a[href^="#"], .mobile-nav a[href^="#"]');
   var sections = navLinks
     .map(function(a){ return document.querySelector(a.getAttribute('href')); })
-    .filter(Boolean);
+    .filter(function(el, i, arr){ return el && arr.indexOf(el) === i; });
 
   if ('IntersectionObserver' in window) {
     var spy = new IntersectionObserver(function(entries){
       entries.forEach(function(entry){
         if (!entry.isIntersecting) return;
         navLinks.forEach(function(a){
-          a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
+          var activo = a.getAttribute('href') === '#' + entry.target.id;
+          a.classList.toggle('active', activo);
+          if (activo) a.setAttribute('aria-current', 'true');
+          else a.removeAttribute('aria-current');
         });
       });
     }, { rootMargin: '-45% 0px -50% 0px' });
     sections.forEach(function(s){ spy.observe(s); });
 
-    /* ---------- Animación de entrada ---------- */
     var revealer = new IntersectionObserver(function(entries, obs){
       entries.forEach(function(entry){
         if (entry.isIntersecting) { entry.target.classList.add('visible'); obs.unobserve(entry.target); }
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -6% 0px' });
-    document.querySelectorAll('.reveal').forEach(function(el){ revealer.observe(el); });
+    $$('.reveal').forEach(function(el){ revealer.observe(el); });
 
     // Red de seguridad: si se entra directo a un ancla (p. ej. .../#contacto),
     // el navegador salta la sección y los bloques de arriba nunca entrarían al
     // viewport. Se muestran de una vez para que nada quede invisible.
     window.addEventListener('load', function(){
-      document.querySelectorAll('.reveal:not(.visible)').forEach(function(el){
+      $$('.reveal:not(.visible)').forEach(function(el){
         if (el.getBoundingClientRect().top < window.innerHeight) {
           el.classList.add('visible');
           revealer.unobserve(el);
@@ -857,34 +1265,93 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
       });
     });
   } else {
-    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('visible'); });
+    $$('.reveal').forEach(function(el){ el.classList.add('visible'); });
   }
 
-  /* ---------- Formularios ----------
-     Sitio estático (GitHub Pages): no hay backend, así que los formularios
-     abren el cliente de correo con todo el contenido ya redactado.
-     Para recibirlos automáticamente, sustituir handleSubmit por un POST a
-     un servicio de formularios (Formspree, FormSubmit, Netlify Forms...)
-     o al endpoint PHP del hosting. Ver README.md. */
+  /* ==================================================================
+     FORMULARIOS
+     Validación en español, mensaje bajo cada campo, foco en el primer
+     error y aviso en la zona aria-live. Sitio estático (GitHub Pages):
+     sin backend, así que se abre el cliente de correo ya redactado.
+     Para recibirlos automáticamente, sustituir el mailto por un POST a
+     un servicio de formularios (Formspree, FormSubmit...). Ver README.
+     ================================================================== */
   var MAIL_TO = 'fdezlogistics1@gmail.com';
 
+  function campos(form){
+    return Array.prototype.filter.call(form.elements, function(el){
+      return el.willValidate && el.name !== 'website' && el.type !== 'submit';
+    });
+  }
+  function nodoError(el){
+    var id = el.getAttribute('aria-describedby');
+    return id ? document.getElementById(id) : null;
+  }
+  function textoError(el){
+    var v = el.validity;
+    if (v.valueMissing) {
+      if (el.tagName === 'SELECT') return 'Selecciona una opción de la lista.';
+      if (el.type === 'email')     return 'Escribe tu correo electrónico.';
+      if (el.type === 'tel')       return 'Escribe tu número de teléfono.';
+      return 'Este campo es obligatorio.';
+    }
+    if (v.typeMismatch && el.type === 'email') return 'Escribe un correo válido, por ejemplo nombre@dominio.com.';
+    if (v.typeMismatch && el.type === 'tel')   return 'Escribe un número de teléfono válido.';
+    if (v.tooShort) return 'Escribe al menos ' + el.minLength + ' caracteres.';
+    return 'Revisa este campo.';
+  }
+  function marcar(el){
+    var nodo = nodoError(el);
+    var ok = el.checkValidity();
+    el.setAttribute('aria-invalid', ok ? 'false' : 'true');
+    if (nodo) {
+      nodo.textContent = ok ? '' : textoError(el);
+      nodo.classList.toggle('show', !ok);
+    }
+    return ok;
+  }
+  function limpiar(form){
+    campos(form).forEach(function(el){
+      el.removeAttribute('aria-invalid');
+      var nodo = nodoError(el);
+      if (nodo) { nodo.textContent = ''; nodo.classList.remove('show'); }
+    });
+  }
+
   function handleSubmit(form, statusEl, buildMail){
+    if (!form) return;
+
+    // Revalidar en cuanto el visitante corrige, nunca antes de intentar enviar.
+    campos(form).forEach(function(el){
+      var revalidar = function(){ if (el.hasAttribute('aria-invalid')) marcar(el); };
+      el.addEventListener('input', revalidar);
+      el.addEventListener('change', revalidar);
+      el.addEventListener('blur', function(){ if (el.value !== '') marcar(el); });
+    });
+
     form.addEventListener('submit', function(e){
       e.preventDefault();
 
       // honeypot: los bots rellenan el campo oculto
       if (form.elements.website && form.elements.website.value !== '') return;
 
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        statusEl.textContent = 'Revisa los campos marcados antes de enviar.';
+      var invalidos = campos(form).filter(function(el){ return !marcar(el); });
+      statusEl.classList.remove('is-ok', 'is-error');
+
+      if (invalidos.length) {
+        statusEl.classList.add('is-error');
+        statusEl.textContent = invalidos.length === 1
+          ? 'Falta 1 campo por completar.'
+          : 'Faltan ' + invalidos.length + ' campos por completar.';
+        invalidos[0].focus({ preventScroll: false });
         return;
       }
 
       var data = {};
-      Array.prototype.forEach.call(form.elements, function(el){
-        if (el.name && el.name !== 'website') data[el.name] = el.value.trim();
-      });
+      campos(form).forEach(function(el){ if (el.name) data[el.name] = el.value.trim(); });
+
+      var boton = form.querySelector('button[type="submit"]');
+      if (boton) boton.setAttribute('aria-busy', 'true');
 
       var mail = buildMail(data);
       statusEl.textContent = 'Abriendo tu aplicación de correo…';
@@ -893,15 +1360,18 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
         '&body=' + encodeURIComponent(mail.body);
 
       setTimeout(function(){
+        statusEl.classList.add('is-ok');
         statusEl.textContent = '¡Gracias! Si no se abrió tu correo, escríbenos a ' + MAIL_TO;
         form.reset();
+        limpiar(form);
+        if (boton) boton.removeAttribute('aria-busy');
       }, 1200);
     });
   }
 
   handleSubmit(
-    document.getElementById('quoteForm'),
-    document.getElementById('quoteStatus'),
+    $('#quoteForm'),
+    $('#quoteStatus'),
     function(d){
       return {
         subject: 'Solicitud de cotización — ' + d.nombre,
@@ -921,8 +1391,8 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
   };
 
   handleSubmit(
-    document.getElementById('contactForm'),
-    document.getElementById('contactStatus'),
+    $('#contactForm'),
+    $('#contactStatus'),
     function(d){
       return {
         subject: (ASUNTOS[d.asunto] || 'Contacto') + ' — ' + d.nombre,
@@ -938,7 +1408,7 @@ h1,h2,h3,h4{color:var(--ink);line-height:1.2;font-weight:800;letter-spacing:-.02
 
   /* ---------- Año dinámico en el footer ---------- */
   var year = new Date().getFullYear();
-  document.querySelectorAll('.footer-bottom span').forEach(function(el){
+  $$('.footer-bottom span').forEach(function(el){
     if (el.textContent.indexOf('©') !== -1) el.textContent = 'FDEZ Logistics © ' + year;
   });
 })();
