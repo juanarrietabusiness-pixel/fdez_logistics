@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cargoxpress Logistic | Envíos puerta a puerta desde Panamá</title>
+
+<!--
+  ============================================================================
+  ESQUELETO FRONT-END — Cargoxpress Logistic
+  ----------------------------------------------------------------------------
+  Este archivo es un punto de partida visual (front-end estático, un solo
+  archivo, CSS y JS embebidos) pensado para evolucionar hacia una plataforma
+  e-commerce completa. Sugerencias para el equipo que continúe:
+
+    - Separar en /components cuando se migre a un framework (React/Vue/Next).
+    - Los bloques están comentados por sección: TOPBAR, HEADER, HERO,
+      SERVICIOS-BAR, CTA, ABOUT, SERVICIOS-GRID, NEWSLETTER, SUCURSALES, FOOTER.
+    - Paleta de marca centralizada en variables CSS (:root) — cambiar ahí
+      para theming global (útil si luego hay panel admin con branding).
+    - IDs y data-attributes (data-hook="...") marcados donde probablemente
+      se conecte lógica real: carrito, tracking, newsletter, login clientes.
+    - Textos son contenido de referencia/placeholder — reemplazar por copy
+      final del cliente.
+    - Imágenes son bloques ilustrativos con CSS/SVG (no se usaron fotos ni
+      logos reales de terceros) — sustituir por assets reales de marca.
+  ============================================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+  :root{
+    --orange:#f7941d;
+    --orange-dark:#e37b00;
+    --blue-dark:#0d3b78;
+    --blue:#1660c9;
+    --blue-light:#2f8fe0;
+    --navy:#0a2c5c;
+    --text:#232323;
+    --muted:#6b7280;
+    --bg-soft:#f5f7fb;
+    --white:#ffffff;
+    --radius:10px;
+    --shadow:0 10px 30px rgba(13,59,120,.12);
+    --container:1200px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Poppins',Arial,sans-serif;
+    color:var(--text);
+    background:var(--white);
+    line-height:1.55;
+    overflow-x:hidden;
+  }
+  img,svg{display:block;max-width:100%;}
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;}
+  .container{max-width:var(--container);margin:0 auto;padding:0 24px;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:13px 28px;border-radius:6px;font-weight:600;
+    font-size:14px;letter-spacing:.3px;transition:.2s ease;
+  }
+  .btn-orange{background:var(--orange);color:#fff;}
+  .btn-orange:hover{background:var(--orange-dark);transform:translateY(-2px);}
+  .btn-outline{background:transparent;border:2px solid #fff;color:#fff;}
+  .btn-outline:hover{background:#fff;color:var(--blue-dark);}
+  .btn-navy{background:var(--navy);color:#fff;}
+  .btn-navy:hover{background:var(--blue-dark);}
+  .section-tag{
+    color:var(--orange);font-weight:700;text-transform:uppercase;
+    font-size:13px;letter-spacing:1.5px;margin-bottom:8px;display:block;
+  }
+  .section-title{font-size:clamp(24px,3.2vw,36px);font-weight:800;color:var(--navy);}
+
+  /* ================= TOPBAR ================= */
+  .topbar{
+    background:var(--orange);color:#fff;font-size:13px;
+  }
+  .topbar .container{
+    display:flex;justify-content:space-between;align-items:center;
+    padding-top:8px;padding-bottom:8px;flex-wrap:wrap;gap:6px;
+  }
+  .topbar-left{display:flex;gap:22px;flex-wrap:wrap;}
+  .topbar-left a{display:flex;align-items:center;gap:7px;color:#fff;opacity:.95;}
+  .topbar-left a:hover{opacity:1;text-decoration:underline;}
+  .topbar-social{display:flex;gap:14px;}
+  .topbar-social a{
+    width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.18);
+    display:flex;align-items:center;justify-content:center;font-size:13px;
+  }
+  .topbar-social a:hover{background:#fff;color:var(--orange);}
+
+  /* ================= HEADER ================= */
+  header.site-header{
+    background:linear-gradient(90deg,var(--blue-dark),var(--blue-light));
+    position:sticky;top:0;z-index:200;box-shadow:0 4px 18px rgba(0,0,0,.12);
+  }
+  .header-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 24px;gap:24px;
+  }
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand-mark{
+    width:56px;height:56px;border-radius:50%;background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 12px rgba(0,0,0,.2);flex-shrink:0;position:relative;
+  }
+  .brand-mark i{font-size:24px;color:var(--orange);}
+  .brand-text{line-height:1.1;}
+  .brand-text .b1{font-weight:800;font-size:19px;color:#fff;letter-spacing:.5px;}
+  .brand-text .b1 span{color:var(--orange);}
+  .brand-text .b2{font-size:10px;letter-spacing:3px;color:#cfe0ff;font-weight:600;}
+
+  nav.main-nav{display:flex;}
+  nav.main-nav ul{display:flex;gap:26px;align-items:center;flex-wrap:wrap;}
+  nav.main-nav a{
+    color:#eaf2ff;font-weight:500;font-size:14.5px;position:relative;
+    padding:6px 0;
+  }
+  nav.main-nav a::after{
+    content:"";position:absolute;left:0;bottom:0;height:2px;width:0;
+    background:var(--orange);transition:.25s;
+  }
+  nav.main-nav a:hover::after{width:100%;}
+
+  .header-actions{display:flex;align-items:center;gap:16px;}
+  .cart-btn{position:relative;color:#fff;font-size:19px;}
+  .cart-btn .badge{
+    position:absolute;top:-8px;right:-10px;background:var(--orange);
+    color:#fff;font-size:10px;font-weight:700;width:18px;height:18px;
+    border-radius:50%;display:flex;align-items:center;justify-content:center;
+  }
+  .burger{display:none;color:#fff;font-size:22px;}
+
+  /* ================= HERO ================= */
+  .hero{
+    position:relative;background:linear-gradient(115deg,var(--blue-dark) 0%,var(--blue) 55%,var(--orange) 130%);
+    overflow:hidden;min-height:520px;display:flex;align-items:center;
+  }
+  .hero::before{
+    content:"";position:absolute;inset:0;opacity:.12;
+    background-image:radial-gradient(circle,#fff 2px,transparent 2px);
+    background-size:26px 26px;
+  }
+  .hero-slide{
+    display:none;width:100%;
+  }
+  .hero-slide.active{display:block;}
+  .hero-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;
+    position:relative;z-index:2;padding:60px 0;
+  }
+  .hero-copy h1{
+    color:#fff;font-size:clamp(28px,4vw,44px);font-weight:800;line-height:1.15;
+    margin-bottom:10px;
+  }
+  .hero-copy h1 .accent{
+    background:#fff;color:var(--blue-dark);padding:4px 14px;border-radius:6px;
+    display:inline-block;margin-top:6px;
+  }
+  .hero-copy p.tagline{color:#ffe3bd;font-weight:600;font-size:15px;margin:14px 0 22px;letter-spacing:.3px;}
+  .store-pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;}
+  .store-pills span{
+    background:rgba(255,255,255,.95);color:var(--navy);font-weight:700;
+    font-size:12.5px;padding:8px 14px;border-radius:20px;box-shadow:var(--shadow);
+  }
+  .hero-visual{
+    position:relative;height:340px;border-radius:16px;
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);
+    display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);
+  }
+  .hero-visual i{font-size:110px;color:rgba(255,255,255,.85);}
+  .hero-nav{
+    position:absolute;top:50%;transform:translateY(-50%);z-index:3;
+    width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.2);
+    color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;
+  }
+  .hero-nav:hover{background:#fff;color:var(--blue-dark);}
+  .hero-nav.prev{left:18px;} .hero-nav.next{right:18px;}
+  .hero-dots{
+    position:absolute;bottom:18px;left:50%;transform:translateX(-50%);
+    display:flex;gap:8px;z-index:3;
+  }
+  .hero-dots button{
+    width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.5);
+  }
+  .hero-dots button.active{background:#fff;width:22px;border-radius:5px;}
+
+  /* ================= SERVICES ICON BAR ================= */
+  .icon-bar{display:grid;grid-template-columns:repeat(4,1fr);background:var(--blue-dark);}
+  .icon-bar a{
+    display:flex;align-items:center;justify-content:center;gap:12px;
+    padding:20px 14px;color:#fff;font-weight:600;font-size:15px;
+    border-right:1px solid rgba(255,255,255,.12);transition:.2s;
+  }
+  .icon-bar a:last-child{border-right:none;}
+  .icon-bar a:hover{background:var(--orange);}
+  .icon-bar i{font-size:20px;}
+
+  /* ================= CTA STRIP ================= */
+  .cta-strip{
+    background:linear-gradient(90deg,var(--orange),var(--orange-dark));
+    color:#fff;
+  }
+  .cta-strip .container{
+    display:flex;justify-content:space-between;align-items:center;
+    gap:24px;flex-wrap:wrap;padding:34px 24px;
+  }
+  .cta-strip h2{font-size:clamp(20px,2.6vw,28px);font-weight:800;margin-bottom:8px;}
+  .cta-strip p{max-width:640px;color:#fff4e6;font-size:14.5px;}
+  .cta-strip .btn-outline{white-space:nowrap;}
+
+  /* ================= ABOUT ================= */
+  .about{padding:80px 0;position:relative;background:var(--bg-soft);overflow:hidden;}
+  .about-deco{position:absolute;opacity:.08;font-size:120px;color:var(--blue);}
+  .about-deco.d1{top:-20px;left:-30px;} .about-deco.d2{bottom:-30px;right:-20px;}
+  .about-inner{max-width:780px;margin:0 auto;text-align:center;position:relative;z-index:1;}
+  .about-inner p{color:var(--muted);margin:18px 0 26px;font-size:15.5px;}
+
+  /* ================= SERVICES GRID ================= */
+  .services{padding:80px 0;}
+  .services-head{text-align:center;max-width:640px;margin:0 auto 46px;}
+  .services-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:26px;
+  }
+  .service-card{
+    background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:30px 24px;text-align:center;transition:.25s;border:1px solid #eef1f6;
+  }
+  .service-card:hover{transform:translateY(-6px);border-color:var(--orange);}
+  .service-icon{
+    width:66px;height:66px;border-radius:50%;
+    background:linear-gradient(135deg,var(--blue),var(--blue-light));
+    display:flex;align-items:center;justify-content:center;margin:0 auto 18px;
+  }
+  .service-icon i{color:#fff;font-size:26px;}
+  .service-card h3{font-size:16.5px;font-weight:700;color:var(--navy);margin-bottom:10px;}
+  .service-card a.details{
+    color:var(--orange);font-weight:600;font-size:13.5px;display:inline-flex;
+    align-items:center;gap:6px;
+  }
+  .service-card a.details:hover{text-decoration:underline;}
+
+  /* ================= NEWSLETTER / SOCIAL ================= */
+  .newsletter{
+    background:linear-gradient(90deg,var(--navy),var(--blue));
+    color:#fff;padding:60px 0;
+  }
+  .newsletter .container{
+    display:flex;justify-content:space-between;align-items:center;gap:30px;flex-wrap:wrap;
+  }
+  .newsletter h2{font-size:clamp(20px,2.4vw,26px);font-weight:800;margin-bottom:8px;}
+  .newsletter p{color:#cfe0ff;font-size:14.5px;}
+  .newsletter form{display:flex;gap:10px;flex-wrap:wrap;}
+  .newsletter input{
+    padding:13px 16px;border-radius:6px;border:none;min-width:240px;font-size:14px;
+  }
+  .social-icons{display:flex;gap:12px;margin-top:16px;}
+  .social-icons a{
+    width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.15);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .social-icons a:hover{background:var(--orange);}
+
+  /* ================= SUCURSALES ================= */
+  .branches{padding:80px 0;background:var(--bg-soft);}
+  .branches-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px;margin-top:40px;}
+  .branch-card{
+    background:#fff;border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);
+    display:flex;gap:18px;
+  }
+  .branch-card i{font-size:26px;color:var(--orange);flex-shrink:0;margin-top:4px;}
+  .branch-card h3{font-size:17px;color:var(--navy);margin-bottom:8px;}
+  .branch-card p{color:var(--muted);font-size:14px;margin-bottom:6px;}
+  .branch-card a{color:var(--blue);font-weight:600;font-size:14px;}
+
+  /* ================= FOOTER ================= */
+  footer.site-footer{background:var(--navy);color:#cfe0ff;padding:50px 0 20px;}
+  .footer-grid{
+    display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:36px;padding-bottom:34px;
+    border-bottom:1px solid rgba(255,255,255,.12);
+  }
+  .footer-grid h4{color:#fff;font-size:15px;margin-bottom:16px;letter-spacing:.4px;}
+  .footer-grid ul li{margin-bottom:10px;font-size:13.5px;}
+  .footer-grid ul li a:hover{color:var(--orange);}
+  .footer-brand .brand-mark{background:#fff;}
+  .footer-brand p{font-size:13.5px;margin-top:14px;color:#a9c1e6;}
+  .footer-bottom{
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    padding-top:20px;font-size:12.5px;color:#8fa9d6;
+  }
+  .footer-bottom a{color:#cfe0ff;}
+  .footer-bottom a:hover{color:var(--orange);}
+
+  /* ================= RESPONSIVE ================= */
+  @media (max-width:980px){
+    nav.main-nav{
+      position:fixed;top:0;right:-280px;height:100vh;width:280px;
+      background:var(--blue-dark);flex-direction:column;padding:90px 26px;
+      transition:.3s;z-index:250;
+    }
+    nav.main-nav.open{right:0;}
+    nav.main-nav ul{flex-direction:column;align-items:flex-start;gap:20px;}
+    .burger{display:block;}
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-visual{height:220px;}
+    .icon-bar{grid-template-columns:repeat(2,1fr);}
+    .services-grid{grid-template-columns:repeat(2,1fr);}
+    .branches-grid{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:560px){
+    .services-grid{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:1fr;}
+    .cta-strip .container{flex-direction:column;align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= TOPBAR ================= -->
+<div class="topbar">
+  <div class="container">
+    <div class="topbar-left">
+      <a href="tel:+5076530000"><i class="fa-solid fa-phone"></i> +507 6530-0000</a>
+      <a href="mailto:info@cargoxpresslogistic.com"><i class="fa-solid fa-envelope"></i> info@cargoxpresslogistic.com</a>
+    </div>
+    <div class="topbar-social">
+      <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+      <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+      <a href="#" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+    </div>
+  </div>
+</div>
+
+<!-- ================= HEADER ================= -->
+<header class="site-header">
+  <div class="header-inner container">
+    <a href="/" class="brand">
+      <div class="brand-mark"><i class="fa-solid fa-plane"></i></div>
+      <div class="brand-text">
+        <div class="b1">CARGO<span>XPRESS</span></div>
+        <div class="b2">LOGISTIC</div>
+      </div>
+    </a>
+
+    <nav class="main-nav" id="mainNav">
+      <ul>
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#nosotros">¿Quiénes Somos?</a></li>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#rastreo" data-hook="tracking-link">Rastreo</a></li>
+        <li><a href="#compras-online" data-hook="online-tracking-link">Rastrear compras online</a></li>
+        <li><a href="#casillero" data-hook="create-locker-link">Crear Casillero</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <a href="#contacto" class="btn btn-orange">Contáctanos</a>
+      <a href="#carrito" class="cart-btn" data-hook="cart-icon">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span class="badge" data-hook="cart-count">0</span>
+      </a>
+      <button class="burger" id="burgerBtn" aria-label="Menú"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="inicio">
+  <div class="container">
+    <button class="hero-nav prev" id="heroPrev" aria-label="Anterior"><i class="fa-solid fa-chevron-left"></i></button>
+    <button class="hero-nav next" id="heroNext" aria-label="Siguiente"><i class="fa-solid fa-chevron-right"></i></button>
+
+    <div class="hero-slide active" data-slide="0">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <h1>Compra en línea<br><span class="accent">y envía a Panamá</span></h1>
+          <p class="tagline">EN LAS TIENDAS DE TU PREFERENCIA</p>
+          <div class="store-pills">
+            <span>Amazon</span><span>Target</span><span>eBay</span><span>Macy's</span>
+            <span>SHEIN</span><span>Walmart</span><span>IKEA</span><span>Pottery Barn</span>
+          </div>
+        </div>
+        <div class="hero-visual"><i class="fa-solid fa-cart-shopping"></i></div>
+      </div>
+    </div>
+
+    <div class="hero-slide" data-slide="1">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <h1>Entregas puerta a puerta<br><span class="accent">rápidas y seguras</span></h1>
+          <p class="tagline">PANAMÁ · COLOMBIA · ECUADOR · COSTA RICA · VENEZUELA</p>
+          <a href="#servicios" class="btn btn-orange" style="margin-top:10px;">Ver Servicios</a>
+        </div>
+        <div class="hero-visual"><i class="fa-solid fa-box-open"></i></div>
+      </div>
+    </div>
+
+    <div class="hero-dots" id="heroDots">
+      <button class="active" data-dot="0"></button>
+      <button data-dot="1"></button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SERVICES ICON BAR ================= -->
+<div class="icon-bar">
+  <a href="#compras-online"><i class="fa-solid fa-cart-shopping"></i> Compras x Internet</a>
+  <a href="#mensajeria"><i class="fa-solid fa-envelope-open-text"></i> Mensajería</a>
+  <a href="#envios-aereos"><i class="fa-solid fa-plane"></i> Envíos Aéreos</a>
+  <a href="#envios-maritimos"><i class="fa-solid fa-ship"></i> Envíos Marítimos</a>
+</div>
+
+<!-- ================= CTA STRIP ================= -->
+<div class="cta-strip">
+  <div class="container">
+    <div>
+      <h2>ENVÍOS DESDE PANAMÁ HACIA COLOMBIA, ECUADOR, COSTA RICA Y VENEZUELA</h2>
+      <p>Conectamos tu casillero en Panamá con destinos en Colombia, Ecuador, Costa Rica y Venezuela, con seguimiento en cada etapa del envío.</p>
+    </div>
+    <a href="#servicios" class="btn btn-outline">Ver Servicios</a>
+  </div>
+</div>
+
+<!-- ================= ABOUT ================= -->
+<section class="about" id="nosotros">
+  <i class="fa-solid fa-globe about-deco d1"></i>
+  <i class="fa-solid fa-plane about-deco d2"></i>
+  <div class="container about-inner">
+    <span class="section-tag">¿Quiénes somos?</span>
+    <h2 class="section-title">Acerca de Nosotros</h2>
+    <p>
+      Cargoxpress Logistic es una empresa panameña de servicios courier, con sede
+      central en Ciudad de Panamá, dedicada a mover paquetes y documentos puerta a
+      puerta hacia Colombia, Ecuador, Costa Rica y Venezuela, apoyada en
+      infraestructura logística propia y un equipo enfocado en la seguridad y
+      rapidez de cada envío.
+    </p>
+    <a href="#" class="btn btn-navy">Leer Más</a>
+  </div>
+</section>
+
+<!-- ================= SERVICES GRID ================= -->
+<section class="services" id="servicios">
+  <div class="container">
+    <div class="services-head">
+      <span class="section-tag" style="text-align:center;">Lo que ofrecemos</span>
+      <h2 class="section-title">Nuestros Servicios</h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
+        <h3>Servicio Mensajería</h3>
+        <a class="details" href="#">Ver Detalles <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-plane-departure"></i></div>
+        <h3>Envíos Aéreos</h3>
+        <a class="details" href="#">Ver Detalles <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-ship"></i></div>
+        <h3>Envíos Marítimos</h3>
+        <a class="details" href="#">Ver Detalles <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-truck-fast"></i></div>
+        <h3>Envíos Terrestres</h3>
+        <a class="details" href="#">Ver Detalles <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-globe"></i></div>
+        <h3>Courier Internacional</h3>
+        <a class="details" href="#">Ver Detalles <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-house-chimney"></i></div>
+        <h3>Mudanzas Internacionales</h3>
+        <a class="details" href="#">Ver Detalles <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-box"></i></div>
+        <h3>Registro de Casillero</h3>
+        <a class="details" href="#">Ver Detalles <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+        <h3>Compras por Internet</h3>
+        <a class="details" href="#">Ver Detalles <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-location-dot"></i></div>
+        <h3>Rastreo de Envíos</h3>
+        <a class="details" href="#">Ver Detalles <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= NEWSLETTER / SOCIAL ================= -->
+<section class="newsletter">
+  <div class="container">
+    <div>
+      <h2>Síguenos en nuestras redes sociales</h2>
+      <p>Mantente actualizado con artículos, promociones y estado de tus envíos.</p>
+      <div class="social-icons">
+        <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+      </div>
+    </div>
+    <form data-hook="newsletter-form" onsubmit="return false;">
+      <input type="email" placeholder="Tu correo electrónico" required>
+      <button type="submit" class="btn btn-orange">Suscribirme</button>
+    </form>
+  </div>
+</section>
+
+<!-- ================= SUCURSALES ================= -->
+<section class="branches" id="sucursales">
+  <div class="container">
+    <div class="services-head">
+      <span class="section-tag" style="text-align:center;">Dónde estamos</span>
+      <h2 class="section-title">Nuestras Sucursales</h2>
+    </div>
+    <div class="branches-grid">
+      <div class="branch-card">
+        <i class="fa-solid fa-location-dot"></i>
+        <div>
+          <h3>Sucursal Vía Argentina</h3>
+          <p>Corregimiento de Bella Vista, El Cangrejo, Panamá.</p>
+          <a href="tel:+5073944840">Tel: 394-4840 / 6530-9035</a>
+        </div>
+      </div>
+      <div class="branch-card">
+        <i class="fa-solid fa-location-dot"></i>
+        <div>
+          <h3>Sucursal Vía Porras</h3>
+          <p>San Francisco, Avenida Belisario Porras, Panamá.</p>
+          <a href="tel:+5073887274">Tel: 388-7274 / 6617-2857</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand" style="margin-bottom:6px;">
+          <div class="brand-mark"><i class="fa-solid fa-plane" style="color:var(--orange);"></i></div>
+          <div class="brand-text">
+            <div class="b1" style="color:#fff;">CARGO<span>XPRESS</span></div>
+            <div class="b2">LOGISTIC</div>
+          </div>
+        </div>
+        <p>Envíos puerta a puerta desde Panamá hacia Colombia, Ecuador, Costa Rica y Venezuela.</p>
+      </div>
+      <div>
+        <h4>Empresa</h4>
+        <ul>
+          <li><a href="#nosotros">¿Quiénes Somos?</a></li>
+          <li><a href="#servicios">Servicios</a></li>
+          <li><a href="#sucursales">Sucursales</a></li>
+          <li><a href="#contacto">Contáctanos</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Clientes</h4>
+        <ul>
+          <li><a href="#rastreo">Rastreo de Envíos</a></li>
+          <li><a href="#compras-online">Compras Online</a></li>
+          <li><a href="#casillero">Crear Casillero</a></li>
+          <li><a href="#carrito">Mi Carrito</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <ul>
+          <li><i class="fa-solid fa-phone"></i> +507 6530-0000</li>
+          <li><i class="fa-solid fa-envelope"></i> info@cargoxpresslogistic.com</li>
+          <li><i class="fa-solid fa-location-dot"></i> Ciudad de Panamá, Panamá</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Cargoxpress Logistic. Todos los derechos reservados.</span>
+      <span><a href="#">Términos y Condiciones</a> · <a href="#">Política de Privacidad</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Menú móvil
+  const burger = document.getElementById('burgerBtn');
+  const nav = document.getElementById('mainNav');
+  burger.addEventListener('click', () => nav.classList.toggle('open'));
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
+
+  // Carrusel hero simple
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots = document.querySelectorAll('#heroDots button');
+  let current = 0;
+  function showSlide(i){
+    slides.forEach(s => s.classList.remove('active'));
+    dots.forEach(d => d.classList.remove('active'));
+    current = (i + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+  document.getElementById('heroPrev').addEventListener('click', () => showSlide(current - 1));
+  document.getElementById('heroNext').addEventListener('click', () => showSlide(current + 1));
+  dots.forEach((d, i) => d.addEventListener('click', () => showSlide(i)));
+  setInterval(() => showSlide(current + 1), 6000);
+
+  // Hook de ejemplo: contador de carrito (placeholder para futura lógica real)
+  // document.querySelector('[data-hook="cart-count"]').textContent = cartItems.length;
+</script>
+
+</body>
+</html>
