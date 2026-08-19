@@ -3,8 +3,9 @@ name: Tests
 on:
   push:
     branches-ignore:
+      # En main los tests corren desde el workflow de despliegue (workflow_call),
+      # así que aquí se ignoran para no ejecutarlos dos veces.
       - main
-      - claude/fdez-logistics-refactor-0d4gha
   pull_request:
   workflow_dispatch:
   # Permite que el workflow de despliegue reutilice estos mismos tests

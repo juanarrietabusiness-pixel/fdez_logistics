@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - claude/fdez-logistics-refactor-0d4gha
   workflow_dispatch:
 
 permissions:
