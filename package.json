@@ -1,0 +1,15 @@
+{
+  "name": "fdez-logistics-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sitio estático de FDEZ Logistics",
+  "scripts": {
+    "serve": "python3 -m http.server 8000",
+    "test:html": "python3 tests/validate_html.py",
+    "test:browser": "node tests/browser_check.mjs",
+    "test": "npm run test:html && npm run test:browser"
+  },
+  "devDependencies": {
+    "playwright": "1.49.1"
+  }
+}

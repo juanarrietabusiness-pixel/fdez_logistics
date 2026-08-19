@@ -1,0 +1,63 @@
+name: Tests
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - claude/fdez-logistics-refactor-0d4gha
+  pull_request:
+  workflow_dispatch:
+  # Permite que el workflow de despliegue reutilice estos mismos tests
+  # como requisito previo, sin duplicar los pasos.
+  workflow_call:
+
+jobs:
+  test:
+    name: Validar el sitio
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Instalar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Instalar Chromium para Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Validación estática del HTML
+        run: npm run test:html
+
+      - name: Levantar el sitio
+        run: |
+          nohup python3 -m http.server 8000 > /tmp/servidor.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8000/index.html -o /dev/null; then
+              echo "Servidor listo"; exit 0
+            fi
+            sleep 1
+          done
+          echo "::error::El servidor local no arrancó"; exit 1
+
+      - name: Pruebas de navegador
+        run: node tests/browser_check.mjs http://localhost:8000
+
+      - name: Capturas del sitio
+        if: always()
+        continue-on-error: true
+        run: node tests/screenshots.mjs http://localhost:8000 capturas
+
+      - name: Publicar capturas como artefacto
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: capturas-del-sitio
+          path: capturas/
+          if-no-files-found: warn
+          retention-days: 14

@@ -11,6 +11,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  actions: read
 
 # Una sola publicación a la vez; no cancela un despliegue en curso.
 concurrency:
@@ -18,8 +19,14 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Reutiliza el workflow de tests: si algo falla, no se publica nada.
+  test:
+    name: Tests
+    uses: ./.github/workflows/tests.yml
+
   build:
     name: Preparar sitio
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
