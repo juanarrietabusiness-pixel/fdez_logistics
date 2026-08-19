@@ -42,8 +42,12 @@ jobs:
           echo "Archivos que se publican:"
           find _site -type f | sed 's|^_site/||' | sort
 
+      # enablement: true activa GitHub Pages en modo "GitHub Actions"
+      # automáticamente la primera vez, sin tocar Settings a mano.
       - name: Configurar Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - name: Subir artefacto
         uses: actions/upload-pages-artifact@v3
