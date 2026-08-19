@@ -1,0 +1,71 @@
+name: Deploy a GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - claude/fdez-logistics-refactor-0d4gha
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Una sola publicación a la vez; no cancela un despliegue en curso.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Preparar sitio
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verificar archivos requeridos
+        run: |
+          test -f index.html || { echo "::error::Falta index.html"; exit 1; }
+          test -f logo.webp  || { echo "::error::Falta logo.webp";  exit 1; }
+
+      - name: Armar carpeta pública
+        run: |
+          mkdir -p _site
+          cp index.html 404.html logo.webp _site/
+          if [ -d assets ]; then
+            cp -r assets _site/
+            rm -f _site/assets/img/README.md
+          fi
+          touch _site/.nojekyll
+          echo "Archivos que se publican:"
+          find _site -type f | sed 's|^_site/||' | sort
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Subir artefacto
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    name: Publicar
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Desplegar a GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Mostrar link de previsualización
+        run: |
+          {
+            echo "### Sitio publicado :rocket:"
+            echo ""
+            echo "**${{ steps.deployment.outputs.page_url }}**"
+          } >> "$GITHUB_STEP_SUMMARY"
