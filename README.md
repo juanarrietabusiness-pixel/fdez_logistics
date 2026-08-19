@@ -23,9 +23,9 @@ tarjeta de previsualización con el logo, el título y la descripción
 3. En **Settings → Environments → `github-pages` → Deployment branches**,
    permite la rama desde la que quieras publicar (por ejemplo `claude/*` para
    poder previsualizar ramas de trabajo antes de mergear a `main`).
-4. Listo. Cada `push` a `main` (o a la rama de trabajo
-   `claude/fdez-logistics-refactor-0d4gha`) corre los tests y, si pasan,
-   vuelve a publicar el sitio solo.
+4. Listo. Cada `push` a `main` corre los tests y, si pasan, vuelve a publicar
+   el sitio solo. En cualquier otra rama y en cada pull request se ejecutan los
+   tests, pero no se publica nada.
 
 El workflow está en [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
 y también puede lanzarse a mano desde la pestaña **Actions → Deploy a GitHub Pages
