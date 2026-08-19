@@ -1031,13 +1031,16 @@ p{text-wrap:pretty}
   var burger    = $('#burgerBtn');
   var mobileNav = $('#mobileNav');
 
+  var burgerIcon = burger.querySelector('i');
+
   function setMenu(open, devolverFoco){
     mobileNav.classList.toggle('open', open);
     burger.setAttribute('aria-expanded', String(open));
     burger.setAttribute('aria-label', open ? 'Cerrar menú de navegación' : 'Abrir menú de navegación');
-    burger.innerHTML = open
-      ? '<i class="fa-solid fa-xmark" aria-hidden="true"></i>'
-      : '<i class="fa-solid fa-bars" aria-hidden="true"></i>';
+    // Se cambia la clase del icono en vez de rehacer el innerHTML: si se
+    // reemplaza el <i>, el e.target del clic queda fuera del DOM y el
+    // manejador de "clic fuera" cerraría el menú recién abierto.
+    if (burgerIcon) burgerIcon.className = open ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
     document.body.classList.toggle('nav-open', open);
     if (open) {
       var primero = $('a', mobileNav);
@@ -1061,6 +1064,8 @@ p{text-wrap:pretty}
 
   document.addEventListener('click', function(e){
     if (!mobileNav.classList.contains('open')) return;
+    // Un destino ya desconectado del documento no puede ser un clic "fuera".
+    if (!e.target.isConnected) return;
     if (e.target.closest('#mobileNav') || e.target.closest('#burgerBtn')) return;
     setMenu(false, false);
   });
@@ -1082,6 +1087,7 @@ p{text-wrap:pretty}
   var dotsWrap = $('#heroDots');
   var playBtn  = $('#heroPlay');
   var live     = $('#heroLive');
+  var playIcon = playBtn.querySelector('i');
   var index = 0, timer = null, enPausa = false, pausaUsuario = false;
   var DELAY = 6000;
 
@@ -1125,9 +1131,7 @@ p{text-wrap:pretty}
     playBtn.setAttribute('aria-label', pausado
       ? 'Reanudar cambio automático de imágenes'
       : 'Pausar cambio automático de imágenes');
-    playBtn.innerHTML = pausado
-      ? '<i class="fa-solid fa-play" aria-hidden="true"></i>'
-      : '<i class="fa-solid fa-pause" aria-hidden="true"></i>';
+    if (playIcon) playIcon.className = pausado ? 'fa-solid fa-play' : 'fa-solid fa-pause';
   }
 
   playBtn.addEventListener('click', function(){

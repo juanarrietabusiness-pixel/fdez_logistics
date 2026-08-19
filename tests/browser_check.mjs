@@ -101,6 +101,30 @@ for (const [perfil, width, height] of [['escritorio', 1440, 900], ['móvil', 390
     await page.waitForTimeout(400);
     check(!(await page.locator('#mobileNav').evaluate((n) => n.classList.contains('open'))),
       'móvil: el menú no se cierra al elegir una sección');
+
+    // El dedo suele caer sobre el icono, no sobre el <button>. Si al abrir se
+    // reemplaza ese icono, el destino del clic queda fuera del DOM y el cierre
+    // por "clic fuera" mata el menú recién abierto.
+    await page.evaluate(() => document.querySelector('#burgerBtn i').click());
+    await page.waitForTimeout(250);
+    check(await page.locator('#mobileNav').evaluate((n) => n.classList.contains('open')),
+      'móvil: tocar el icono de la hamburguesa no deja el menú abierto');
+    check(await page.locator('#mobileNav a[href="#servicios"]').isVisible(),
+      'móvil: los enlaces del menú no quedan visibles al tocar el icono');
+    await page.evaluate(() => document.querySelector('#burgerBtn i').click());
+    await page.waitForTimeout(250);
+    check(!(await page.locator('#mobileNav').evaluate((n) => n.classList.contains('open'))),
+      'móvil: el icono de la hamburguesa no vuelve a cerrar el menú');
+
+    // Escape y foco de vuelta en el botón, para quien navega con teclado.
+    await page.click('#burgerBtn');
+    await page.waitForTimeout(150);
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(200);
+    check(!(await page.locator('#mobileNav').evaluate((n) => n.classList.contains('open'))),
+      'móvil: Escape no cierra el menú');
+    check(await page.evaluate(() => document.activeElement.id === 'burgerBtn'),
+      'móvil: el foco no vuelve a la hamburguesa al cerrar con Escape');
   } else {
     check(await page.locator('.main-nav a').count() === 5,
       'escritorio: el menú debe tener 5 enlaces');
